@@ -18,6 +18,8 @@
          umanoShadowHeight 는 슬라이딩 패널 윗부분에 그림자 효과
          umanoOverlay 를 false로 해주면 슬라이딩 패널이 위로 보이고 뒷 부분은 반투명하게 보임 -->
 
+
+
     <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -25,17 +27,29 @@
 
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <!--지도 xml -->
         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
+
             <RelativeLayout
                 android:id="@+id/map_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/optionButton"
+                    android:layout_margin="10dp"
+                    android:padding="10dp"
+                    android:src="@drawable/menu"
+                    android:onClick="popClick"/>
                 <!-- 현위치로 돌아오는 button-->
+
                 <ImageButton
                     android:id="@+id/CurrentLocate"
                     android:layout_width="30dp"
