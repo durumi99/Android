@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:gravity="bottom"
+    app:umanoDragView="@id/dragView"
+    app:umanoScrollableView="@id/listView"
+    app:umanoPanelHeight="70dp"
+    app:umanoOverlay="false"
+    app:umanoParallaxOffset="200dp"
+    app:umanoShadowHeight="0dp">
+    <!-- umanoDragView 드래그 해서 보여줄 view를 선택
+         umanoScrollableView  슬라이딩 패널에 내용물이 패널에 표시되는것보다 많을 때 스크롤 해서 보여줄 view 부분
+         umanoParallaxOffset 에 값을 주면 해당 높이만큼 뒤에 화면을 올림
+         umanoShadowHeight 는 슬라이딩 패널 윗부분에 그림자 효과
+         umanoOverlay 를 false로 해주면 슬라이딩 패널이 위로 보이고 뒷 부분은 반투명하게 보임 -->
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <!--지도 xml -->
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <RelativeLayout
+                android:id="@+id/map_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <!-- 현위치로 돌아오는 button-->
+                <ImageButton
+                    android:id="@+id/CurrentLocate"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="31dp"
+                    android:layout_marginBottom="45dp"
+                    android:src="@drawable/cl"></ImageButton>
+
+            </RelativeLayout>
+        </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!--여기서부터 슬라이딩 시 올라오는 스크린-->
+    <LinearLayout
+        android:id="@+id/dragView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="false"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="16sp"
+                android:text="길찾기 할 곳"
+                android:textSize="24sp" />
+
+        </LinearLayout>
+
+        <!-- 스크롤 해서 보여줄 부분으로 사용할 listview-->
+        <ListView
+            android:id="@+id/listView"
+            android:layout_width="match_parent"
+            android:layout_height="300dp">
+        </ListView>
+
+    </LinearLayout>
+
+</com.sothree.slidinguppanel.SlidingUpPanelLayout>
