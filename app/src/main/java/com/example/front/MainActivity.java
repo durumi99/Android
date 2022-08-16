@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 
 import android.Manifest;
+import android.content.Intent;
 import android.location.Location;
 import android.media.Image;
 import android.os.Build;
@@ -99,16 +100,29 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         popM.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
+                Intent intent;
                 switch (item.getItemId()){
                     case R.id.menu1:
-                        Toast.makeText(getApplicationContext(),"Select Menu1",Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(),"Select Menu1",Toast.LENGTH_SHORT).show();
+                        intent = new Intent(MainActivity.this,NoticeActivity.class);
+                        startActivity(intent);
                         return true;
                     case R.id.menu2:
-                        Toast.makeText(getApplicationContext(),"Select Menu2",Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(),"Select Menu2",Toast.LENGTH_SHORT).show();
+                        intent = new Intent(MainActivity.this,FAQActivity.class);
+                        startActivity(intent);
                         return true;
                     case R.id.menu3:
-                        Toast.makeText(getApplicationContext(),"Select Menu3",Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(),"Select Menu3",Toast.LENGTH_SHORT).show();
+                        intent = new Intent(MainActivity.this,LoginActivity.class);
+                        startActivity(intent);
                         return true;
+                    case R.id.menu4:
+                        //Toast.makeText(getApplicationContext(),"Select Menu4",Toast.LENGTH_SHORT).show();
+                        intent = new Intent(MainActivity.this,ReportActivity.class);
+                        startActivity(intent);
+                        return true;
+
                     default:
                         return false;
                 }
@@ -116,40 +130,40 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         });
         popM.show();
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_menu, menu);
-
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        super.onOptionsItemSelected(item);
-        Toast toast = Toast.makeText(getApplicationContext(),"", Toast.LENGTH_LONG);
-
-        switch(item.getItemId())
-        {
-            case R.id.menu1:
-                toast.setText("Select Menu1");
-                break;
-            case R.id.menu2:
-                toast.setText("Select Menu2");
-                break;
-            case R.id.menu3:
-                toast.setText("Select Menu3");
-                break;
-        }
-
-        toast.show();
-
-        return super.onOptionsItemSelected(item);
-
-    }
+//
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        super.onCreateOptionsMenu(menu);
+//
+//        MenuInflater inflater = getMenuInflater();
+//        inflater.inflate(R.menu.main_menu, menu);
+//
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+//        super.onOptionsItemSelected(item);
+//        Toast toast = Toast.makeText(getApplicationContext(),"", Toast.LENGTH_LONG);
+//
+//        switch(item.getItemId())
+//        {
+//            case R.id.menu1:
+//                toast.setText("Select Menu1");
+//                break;
+//            case R.id.menu2:
+//                toast.setText("Select Menu2");
+//                break;
+//            case R.id.menu3:
+//                toast.setText("Select Menu3");
+//                break;
+//        }
+//
+//        toast.show();
+//
+//        return super.onOptionsItemSelected(item);
+//
+//    }
 
     @Override
     public void onLocationChange(Location location) {
