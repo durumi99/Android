@@ -72,12 +72,12 @@
             android:layout_gravity="center"
             android:background="#D3D3D3"
             />
-        //vertical 뷰
-        <LinearLayout
+            //vertical 뷰
+           <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="250dp"
             android:orientation="vertical">
-            //horizontal linearlayout 뷰
+           //horizontal linearlayout 뷰
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -91,24 +91,24 @@
                     android:layout_weight="1"
                     android:layout_marginTop="20dp"
                     android:layout_marginLeft="5dp"
-                    ></ImageView>
-                //출발 위치 입력 폼
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="350dp"
+                ></ImageView>
+            //출발 위치 입력 폼
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:hint="출발 위치"
+                >
+            <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_start"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:hint="출발 위치"
-                    >
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/edit_start"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="19"
-                        />
-                </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_weight="19"
+            />
+            </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
-            //horizontal linearlayout 뷰
+           //horizontal linearlayout 뷰
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
