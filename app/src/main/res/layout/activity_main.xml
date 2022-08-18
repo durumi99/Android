@@ -39,6 +39,7 @@
                     android:layout_margin="10dp"
                     android:onClick="popClick"
                     android:padding="10dp"
+                    android:background="@color/transparent"
                     android:src="@drawable/menu" />
 
                 <!-- 현위치로 돌아오는 button-->
