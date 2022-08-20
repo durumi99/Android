@@ -6,23 +6,35 @@ import androidx.appcompat.widget.PopupMenu;
 
 import android.Manifest;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.google.android.material.textfield.TextInputEditText;
+import com.skt.Tmap.TMapData;
 import com.skt.Tmap.TMapGpsManager;
+import com.skt.Tmap.TMapMarkerItem;
 import com.skt.Tmap.TMapView;
+import com.skt.Tmap.poi_item.TMapPOIItem;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements TMapGpsManager.onLocationChangedCallback {
 
@@ -33,12 +45,14 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
     // T Map GPS
     TMapGpsManager tMapGPS = null;
+    EditText keywordView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        keywordView = (EditText) findViewById(R.id.edit_start);
 
 
         // T Map View
@@ -83,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
         ImageButton CurrentLocation = (ImageButton)findViewById(R.id.CurrentLocate);
         CurrentLocation.bringToFront();
-        CurrentLocation.setBackgroundResource(R.drawable.cl);
+        CurrentLocation.setBackgroundResource(R.drawable.ic_gps);
         CurrentLocation.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -92,6 +106,83 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
             }
         });
 
+        Button btn = (Button) findViewById(R.id.test);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                search();
+            }
+        });
+
+        TextInputEditText start_edit = (TextInputEditText) findViewById(R.id.edit_start);
+        LinearLayout dragView = (LinearLayout) findViewById(R.id.dragView);
+        SlidingUpPanelLayout slidingView = (SlidingUpPanelLayout) findViewById(R.id.slidingView);
+
+
+        //start_edit 눌렀을때 없애기 하려고 ..
+        /*start_edit.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                start_edit.setVisibility(View.INVISIBLE);
+                dragView.setVisibility(View.INVISIBLE);
+            }
+        });
+        start_edit.setOnTouchListener(new View.OnTouchListener(){
+            @Override
+            public boolean  onTouch(View view, MotionEvent event){
+
+                switch(event.getAction()){
+                    case MotionEvent.ACTION_DOWN: {
+                        dragView.setVisibility(View.GONE);
+                        break;
+                    }
+                }
+                return true;
+            }
+        });
+*/
+
+
+    }
+    private void search(){
+        TMapData tmapdata = new TMapData();
+        String keyword = keywordView.getText().toString();
+        tmapdata.findAllPOI(keyword, new TMapData.FindAllPOIListenerCallback() {
+
+            @Override
+            public void onFindAllPOI(ArrayList<TMapPOIItem> poiItem) {
+                tMapView.removeAllMarkerItem(); //찍은 마커들 제거
+                for(int i = 0; i < poiItem.size(); i++) {
+                    TMapPOIItem item = (TMapPOIItem) poiItem.get(i);
+                    //poi 받아서 marker 추가
+                    for (TMapPOIItem poi : poiItem) {
+                        addMarker(poi);
+                    }
+                    //로그찍어보기위함
+                    Log.d("POI Name: ", item.getPOIName().toString() + ", " +
+                            "Address: " + item.getPOIAddress().replace("null", "")  + ", " +
+                            "Point: " + item.getPOIPoint().toString());
+                }
+                poiItem.clear(); //마커 담긴 arraylist 초기화
+            }
+        });
+    }
+    public void addMarker(TMapPOIItem poi) {
+        //point 객체
+        TMapMarkerItem item = new TMapMarkerItem();
+        item.setTMapPoint(poi.getPOIPoint());
+
+        item.setTMapPoint(item.getTMapPoint()); //마커 위치
+        item.setName(poi.getPOIName()); //마커 이름
+        item.setCalloutTitle(poi.getPOIName()); //main message
+        item.setCalloutSubTitle(poi.getPOIContent());//sub message
+        item.setVisible(TMapMarkerItem.VISIBLE);
+
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_icon);//비트맵을 marker 아이콘 설정
+        item.setIcon(bitmap);// 아이콘 적용
+        item.setCanShowCallout(true);
+
+        tMapView.addMarkerItem(poi.getPOIID(),item);
     }
 
     public void popClick(View view){
