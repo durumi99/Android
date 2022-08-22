@@ -1,7 +1,5 @@
 package com.example.front;
 
-import androidx.annotation.FloatRange;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 
@@ -10,14 +8,10 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
-import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.ContextMenu;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -25,9 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.skt.Tmap.TMapData;
@@ -49,17 +41,17 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
     // T Map GPS
     TMapGpsManager tMapGPS = null;
-    EditText keywordView;
-
+    EditText keywordView_start;
+    EditText keywordView_end;
     double latitude;
     double longitude;
-    double minRadius = 1000;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        keywordView = (EditText) findViewById(R.id.searchBar);
-
+        keywordView_start = (EditText) findViewById(R.id.searchBar_start);
+        keywordView_end = (EditText) findViewById(R.id.searchBar_end);
         // T Map View
         tMapView = new TMapView(this);
 
@@ -90,24 +82,31 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         tMapGPS.setMinTime(1000);
         tMapGPS.setMinDistance(10);
 
-        TMapPoint tpoint = tMapView.getLocationPoint();
-        latitude = tpoint.getLatitude();
-        longitude = tpoint.getLongitude();
+
         //네트워크 기반으로 위치 제공(실제휴대폰)
         tMapGPS.setProvider(tMapGPS.NETWORK_PROVIDER);
         //gps 기반으로 위치 제공(에뮬레이터에서씀)
         //tMapGPS.setProvider(tMapGPS.GPS_PROVIDER);
         tMapGPS.OpenGps();
+        tMapView.setTrackingMode(true);
+        tMapView.setSightVisible(true);
+
+
         ImageButton optionButton = (ImageButton)findViewById(R.id.optionButton);
         optionButton.bringToFront();
 
-        //searchBar 객체 생성 & 최상단으로 가져오기
-        EditText searchBar = (EditText) findViewById(R.id.searchBar);
-        searchBar.bringToFront();
 
+
+        //searchBar 객체 생성 & 최상단으로 가져오기
+        EditText searchBar = (EditText) findViewById(R.id.searchBar_start);
+        searchBar.bringToFront();
+        EditText searchBar_end = (EditText) findViewById(R.id.searchBar_end);
+        searchBar_end.bringToFront();
         //searchbarLayout 객체 생성 & 최상단으로 가져오기
-        FrameLayout searchbarLayout = (FrameLayout) findViewById(R.id.searchbarLayout);
+        FrameLayout searchbarLayout = (FrameLayout) findViewById(R.id.searchbarLayout_start);
         searchbarLayout.bringToFront();
+        FrameLayout searchbarLayout_end = (FrameLayout) findViewById(R.id.searchbarLayout_end);
+        searchbarLayout_end.bringToFront();
 
         //현위치로 돌아오는 버튼 객체 생성 & 클릭 이벤트
         ImageButton CurrentLocation = (ImageButton)findViewById(R.id.CurrentLocate);
@@ -121,14 +120,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
             }
         });
 
-        //검색 수행하는 버튼 객체 생성 & 클릭 이벤트
-        Button btn = (Button) findViewById(R.id.search_button1);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                search();
-            }
-        });
+        //여기 밑으로 시작경로랑 도착경로 searchbar 두개인데 코드 복붙이라 간결하게해야함..
 
         //출발지 선택시 searchbar 나타내며 수행할 것
         TextInputEditText start_edit = (TextInputEditText) findViewById(R.id.edit_start);
@@ -147,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         });
 
          //searchbar에서 MAIN으로 돌아오는 BACKTO MAIN 객체 생성 & 클릭 이벤트
-        Button backToMain = (Button) findViewById(R.id.backToMain);
+        Button backToMain = (Button) findViewById(R.id.backToMain_start);
         backToMain.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -157,13 +149,12 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                 searchbarLayout.setVisibility(View.INVISIBLE);
             }
         });
-
         searchBar.setOnKeyListener(new View.OnKeyListener(){
             @Override
             public boolean onKey(View v, int keyCode,KeyEvent event){
                 switch(keyCode){
                     case KeyEvent.KEYCODE_ENTER:
-                        search();
+                        search(1);
                         break;
                     case KeyEvent.KEYCODE_DEL:
                         int length = searchBar.getText().length();
@@ -176,47 +167,91 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
             }
         });
 
+        //도착지 선택시 searchbar 나타내며 수행할 것
+        TextInputEditText edit_end = (TextInputEditText) findViewById(R.id.edit_end);
+        int Height_end = slidingView.getPanelHeight();
+        edit_end.setOnTouchListener(new View.OnTouchListener(){
+            @Override
+            public boolean onTouch(View view , MotionEvent event){
+
+                slidingView.setPanelHeight(0);
+                CurrentLocation.setVisibility(View.GONE);
+                optionButton.setVisibility(View.GONE);
+                searchbarLayout_end.setVisibility(View.VISIBLE);
+                return true;
+            }
+        });
+        //searchbar에서 MAIN으로 돌아오는 BACKTO MAIN 객체 생성 & 클릭 이벤트
+        Button backToMain_end = (Button) findViewById(R.id.backToMain_end);
+        backToMain_end.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                slidingView.setPanelHeight(Height_end);
+                CurrentLocation.setVisibility(View.VISIBLE);
+                optionButton.setVisibility(View.VISIBLE);
+                searchbarLayout_end.setVisibility(View.INVISIBLE);
+            }
+        });
+        searchBar_end.setOnKeyListener(new View.OnKeyListener(){
+            @Override
+            public boolean onKey(View v, int keyCode,KeyEvent event){
+                switch(keyCode){
+                    case KeyEvent.KEYCODE_ENTER:
+                        search(2);
+                        break;
+                    case KeyEvent.KEYCODE_DEL:
+                        int length = searchBar_end.getText().length();
+                        if (length > 0) {
+                            searchBar_end.getText().delete(length -1, length);
+                        }
+                        break;
+                }
+                return true;
+            }
+        });
     }
 
 
-    private void search(){
+    private void search(int index){
+        TMapPoint tpoint = tMapView.getLocationPoint();
+        latitude = tpoint.getLatitude();
+        longitude = tpoint.getLongitude();
+
+
         TMapData tmapdata = new TMapData();
-        String keyword = keywordView.getText().toString();
+        String keyword;
+        System.out.println("==================]"+" "+index);
+        if(index==1)
+            keyword = keywordView_start.getText().toString();
+        else
+            keyword = keywordView_end.getText().toString();
+        TMapView tmapView = new TMapView(this);
+        tmapView.setCenterPoint(longitude, latitude, false);
+        tmapView.setLocationPoint(longitude, latitude);
 
-
-        tmapdata.findAllPOI(keyword, new TMapData.FindAllPOIListenerCallback() {
+        tmapdata.findAroundNamePOI(tpoint, keyword, new TMapData.FindAroundNamePOIListenerCallback()
+        {
             @Override
-            public void onFindAllPOI(ArrayList<TMapPOIItem> poiItem) {
-                tMapView.removeAllMarkerItem(); //찍은 마커들 제거
+            public void onFindAroundNamePOI(final ArrayList<TMapPOIItem> poiItem) {
+                tMapView.removeAllMarkerItem();
                 for(int i = 0; i < poiItem.size(); i++) {
-                    TMapPOIItem item = (TMapPOIItem) poiItem.get(i);
-                    TMapPoint point = new TMapPoint(latitude, longitude);
-                    /*double Distance = item.getDistance(point);
-                    System.out.println(Distance);
-                    if (Distance < minRadius) {
-                        continue;
-                    }*/
-
-                    //poi 받아서 marker 추가
+                    TMapPOIItem item = poiItem.get(i);
                     for (TMapPOIItem poi : poiItem) {
-                            addMarker(poi);
+                        addMarker(poi);
 
                     }
-                    //로그찍어보기위함
                     Log.d("POI Name: ", item.getPOIName().toString() + ", " +
                             "Address: " + item.getPOIAddress().replace("null", "")  + ", " +
                             "Point: " + item.getPOIPoint().toString());
                 }
-                poiItem.clear(); //마커 담긴 arraylist 초기화
             }
         });
+
     }
     public void addMarker(TMapPOIItem poi) {
         //point 객체
         TMapMarkerItem item = new TMapMarkerItem();
         item.setTMapPoint(poi.getPOIPoint());
-
-
 
         item.setTMapPoint(item.getTMapPoint()); //마커 위치
         item.setName(poi.getPOIName()); //마커 이름

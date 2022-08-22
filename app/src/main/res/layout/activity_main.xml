@@ -48,12 +48,12 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="9dp"
-                    android:id="@+id/searchbarLayout"
+                    android:id="@+id/searchbarLayout_start"
                     android:padding="5dp"
                     android:visibility="invisible">
 
                     <EditText
-                        android:id="@+id/searchBar"
+                        android:id="@+id/searchBar_start"
                         android:layout_width="250dp"
                         android:layout_height="50dp"
                         android:layout_alignParentTop="true"
@@ -66,7 +66,7 @@
                         ></EditText>
 
                     <Button
-                        android:id="@+id/backToMain"
+                        android:id="@+id/backToMain_start"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:layout_alignParentTop="true"
@@ -76,7 +76,37 @@
 
                 </FrameLayout>
 
+                <FrameLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="9dp"
+                    android:id="@+id/searchbarLayout_end"
+                    android:padding="5dp"
+                    android:visibility="invisible">
 
+                    <EditText
+                        android:id="@+id/searchBar_end"
+                        android:layout_width="250dp"
+                        android:layout_height="50dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginLeft="50dp"
+                        android:layout_marginTop="10dp"
+
+                        android:background="@drawable/border_searchbar"
+                        android:hint="도착 위치 입력"
+                        android:paddingLeft="50dp"
+                        ></EditText>
+
+                    <Button
+                        android:id="@+id/backToMain_end"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginLeft="60dp"
+                        android:layout_marginTop="23dp"
+                        android:background="@drawable/ic_cancel" />
+
+                </FrameLayout>
 
                 <!-- 현위치로 돌아오는 button-->
 
@@ -137,7 +167,7 @@
                 //출발 위치 입력 폼
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="250dp"
+                    android:layout_width="300dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:hint="출발 위치"
@@ -151,15 +181,7 @@
                         />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <Button
-                    android:layout_marginLeft="10dp"
-                    android:layout_width="60dp"
-                    android:layout_height="68dp"
-                    android:id="@+id/search_button1"
-                    android:text="검색"
-                    android:layout_weight="1"
-                    android:backgroundTint="@color/black"
-                    ></Button>
+
             </LinearLayout>
             //horizontal linearlayout 뷰
             <LinearLayout
@@ -179,25 +201,19 @@
                 //도착 위치 입력 폼
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="250dp"
+                    android:layout_width="300dp"
+
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:hint="도착 위치">
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/edit_end"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:focusableInTouchMode="false"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <Button
-                    android:layout_marginLeft="10dp"
-                    android:layout_width="60dp"
-                    android:layout_height="68dp"
-                    android:id="@+id/search_button2"
-                    android:text="검색"
-                    android:layout_weight="1"
-                    android:backgroundTint="@color/black"
-                    ></Button>
+
             </LinearLayout>
             //구분선
             <View
