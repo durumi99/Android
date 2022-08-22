@@ -8,6 +8,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.PointF;
 import android.location.Location;
 import android.media.Image;
 import android.os.Build;
@@ -27,14 +28,23 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.skt.Tmap.TMapData;
 import com.skt.Tmap.TMapGpsManager;
 import com.skt.Tmap.TMapMarkerItem;
+import com.skt.Tmap.TMapPoint;
+import com.skt.Tmap.TMapTapi;
 import com.skt.Tmap.TMapView;
 import com.skt.Tmap.poi_item.TMapPOIItem;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
+import org.xml.sax.SAXException;
+
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.LogManager;
+
+import javax.xml.parsers.ParserConfigurationException;
 
 public class MainActivity extends AppCompatActivity implements TMapGpsManager.onLocationChangedCallback {
 
@@ -91,6 +101,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         tMapGPS.setProvider(tMapGPS.GPS_PROVIDER);
         tMapGPS.OpenGps();
 
+
         //setting menu
         ImageButton optionButton = (ImageButton)findViewById(R.id.optionButton);
         optionButton.bringToFront();
@@ -141,9 +152,69 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
             }
         });
 */
+        tMapView.setOnClickListenerCallBack(new TMapView.OnClickListenerCallback() {
+            @Override
+            public boolean onPressUpEvent(ArrayList markerlist,ArrayList poilist, TMapPoint point, PointF pointf) {
+                TMapMarkerItem tItem = new TMapMarkerItem();
+                tItem.setTMapPoint(point);
+                tItem.setName("위치");
+                tItem.setVisible(TMapMarkerItem.VISIBLE);
+                Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_icon);
+                tItem.setIcon(bitmap);
+                tMapView.addMarkerItem("marker",tItem);
+                TMapData tmapdata = new TMapData();
+                tmapdata.convertGpsToAddress(point.getLatitude(), point.getLongitude(),
+                        new TMapData.ConvertGPSToAddressListenerCallback() {
+                            @Override
+                            public void onConvertToGPSToAddress(String address) {
+//                            tmapdata.findAddressPOI(address, new TMapData.FindAddressPOIListenerCallback() {
+//                                @Override
+//                                public void onFindAddressPOI(ArrayList poiItem) {
+//                                    for(int i = 0 ; i < poiItem.size(); i++){
+//                                        TMapPOIItem  item = (TMapPOIItem) poiItem.get(i);
+//                                        Log.d("POI Name: ", item.getPOIName().toString() + ", " +
+//                                                "Address: " + item.getPOIAddress().replace("null", "")  + ", " +
+//                                                "Point: " + item.getPOIPoint().toString());
+//                                    }
+//                                }
+//                            });
 
+                            TextInputLayout editTextHint = (TextInputLayout) findViewById(R.id.edit_start_hint);
+                            editTextHint.setHint(null);
+                            EditText editText = (EditText) findViewById(R.id.edit_start);
+                            editText.setText(address);
+                            }
+                        });
 
+                return false;
+            }
+
+            @Override
+            public boolean onPressEvent(ArrayList markerlist,ArrayList poilist, TMapPoint point, PointF pointf) {
+                TMapMarkerItem tItem = new TMapMarkerItem();
+                tItem.setTMapPoint(point);
+                tItem.setName("위치");
+                tItem.setVisible(TMapMarkerItem.VISIBLE);
+                Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_icon);
+                tItem.setIcon(bitmap);
+                tMapView.addMarkerItem("marker",tItem);
+                TMapData tmapdata = new TMapData();
+                tmapdata.convertGpsToAddress(point.getLatitude(), point.getLongitude(),
+                        new TMapData.ConvertGPSToAddressListenerCallback() {
+                            @Override
+                            public void onConvertToGPSToAddress(String address) {
+                                TextInputLayout editTextHint = (TextInputLayout) findViewById(R.id.edit_start_hint);
+                                editTextHint.setHint(null);
+                                EditText editText = (EditText) findViewById(R.id.edit_start);
+                                editText.setText(address);
+                            }
+                        });
+
+                return false;
+            }
+        });
     }
+
     private void search(){
         TMapData tmapdata = new TMapData();
         String keyword = keywordView.getText().toString();
