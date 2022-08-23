@@ -179,10 +179,19 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 //                                }
 //                            });
 
-                            TextInputLayout editTextHint = (TextInputLayout) findViewById(R.id.edit_start_hint);
-                            editTextHint.setHint(null);
                             EditText editText = (EditText) findViewById(R.id.edit_start);
-                            editText.setText(address);
+                            Log.d("Start ",editText.toString());
+                            if(editText.getText().toString().equals("") || editText.getText().toString() == null) {
+                                TextInputLayout editTextHint = (TextInputLayout) findViewById(R.id.edit_start_hint);
+                                editTextHint.setHint(null);
+                                editText.setText(address);
+                            }
+                            else{
+                                editText = (EditText) findViewById(R.id.edit_end);
+                                TextInputLayout editTextHint = (TextInputLayout) findViewById(R.id.edit_end_hint);
+                                editTextHint.setHint(null);
+                                editText.setText(address);
+                            }
                             }
                         });
 
@@ -191,24 +200,33 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
             @Override
             public boolean onPressEvent(ArrayList markerlist,ArrayList poilist, TMapPoint point, PointF pointf) {
-                TMapMarkerItem tItem = new TMapMarkerItem();
-                tItem.setTMapPoint(point);
-                tItem.setName("위치");
-                tItem.setVisible(TMapMarkerItem.VISIBLE);
-                Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_icon);
-                tItem.setIcon(bitmap);
-                tMapView.addMarkerItem("marker",tItem);
-                TMapData tmapdata = new TMapData();
-                tmapdata.convertGpsToAddress(point.getLatitude(), point.getLongitude(),
-                        new TMapData.ConvertGPSToAddressListenerCallback() {
-                            @Override
-                            public void onConvertToGPSToAddress(String address) {
-                                TextInputLayout editTextHint = (TextInputLayout) findViewById(R.id.edit_start_hint);
-                                editTextHint.setHint(null);
-                                EditText editText = (EditText) findViewById(R.id.edit_start);
-                                editText.setText(address);
-                            }
-                        });
+//                TMapMarkerItem tItem = new TMapMarkerItem();
+//                tItem.setTMapPoint(point);
+//                tItem.setName("위치");
+//                tItem.setVisible(TMapMarkerItem.VISIBLE);
+//                Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_icon);
+//                tItem.setIcon(bitmap);
+//                tMapView.addMarkerItem("marker",tItem);
+//                TMapData tmapdata = new TMapData();
+//                tmapdata.convertGpsToAddress(point.getLatitude(), point.getLongitude(),
+//                        new TMapData.ConvertGPSToAddressListenerCallback() {
+//                            @Override
+//                            public void onConvertToGPSToAddress(String address) {
+//                                EditText editText = (EditText) findViewById(R.id.edit_start);
+//                                Log.d("Start ",editText.toString());
+//                                if(editText.getText().toString().equals("") || editText.getText().toString() == null) {
+//                                    TextInputLayout editTextHint = (TextInputLayout) findViewById(R.id.edit_start_hint);
+//                                    editTextHint.setHint(null);
+//                                    editText.setText(address);
+//                                }
+//                                else{
+//                                    editText = (EditText) findViewById(R.id.edit_end);
+//                                    TextInputLayout editTextHint = (TextInputLayout) findViewById(R.id.edit_end_hint);
+//                                    editTextHint.setHint(null);
+//                                    editText.setText(address);
+//                                }
+//                            }
+//                        });
 
                 return false;
             }
