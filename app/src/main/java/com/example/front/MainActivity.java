@@ -254,6 +254,8 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         ImageButton CurrentLocation = (ImageButton)findViewById(R.id.CurrentLocate);
         ImageButton optionButton = (ImageButton)findViewById(R.id.optionButton);
         FrameLayout searchbarLayout = (FrameLayout) findViewById(R.id.searchbarLayout_start);
+        ImageView CurrentLocationBackground = (ImageView)findViewById(R.id.CurrentLocateBackground);
+        CurrentLocationBackground.setVisibility(View.GONE);
         slidingView.setPanelHeight(0);
         CurrentLocation.setVisibility(View.GONE);
         optionButton.setVisibility(View.GONE);
@@ -264,7 +266,8 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         ImageButton CurrentLocation = (ImageButton)findViewById(R.id.CurrentLocate);
         ImageButton optionButton = (ImageButton)findViewById(R.id.optionButton);
         FrameLayout searchbarLayout = (FrameLayout) findViewById(R.id.searchbarLayout_start);
-
+        ImageView CurrentLocationBackground = (ImageView)findViewById(R.id.CurrentLocateBackground);
+        CurrentLocationBackground.setVisibility(View.VISIBLE);
         slidingView.setPanelHeight(340);
         CurrentLocation.setVisibility(View.VISIBLE);
         optionButton.setVisibility(View.VISIBLE);
