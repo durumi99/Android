@@ -210,10 +210,10 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
             }
         });
 
-        tMapView.setOnClickListenerCallBack(new TMapView.OnClickListenerCallback() {
+        tMapView.setOnLongClickListenerCallback(new TMapView.OnLongClickListenerCallback() {
 
             @Override
-            public boolean onPressUpEvent(ArrayList markerlist,ArrayList poilist, TMapPoint point, PointF pointf) {
+            public void onLongPressEvent(ArrayList<TMapMarkerItem> arrayList, ArrayList<TMapPOIItem> arrayList1, TMapPoint point) {
                 TMapMarkerItem tItem = new TMapMarkerItem();
                 tItem.setTMapPoint(point);
                 tItem.setName("위치");
@@ -227,39 +227,6 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                         new TMapData.ConvertGPSToAddressListenerCallback() {
                             @Override
                             public void onConvertToGPSToAddress(String address) {
-//                                tmapdata.findAllPOI("숭실대학교", new TMapData.FindAllPOIListenerCallback() {
-//                                    @Override
-//                                    public void onFindAllPOI(ArrayList poiItem) {
-//                                        for(int i = 0 ; i < poiItem.size(); i++){
-//                                            TMapPOIItem  item = (TMapPOIItem) poiItem.get(i);
-//                                            if(item.getPOIAddress().toString().equals(address.toString())){
-//                                                address = item.getPOIAddress();
-//                                                break;
-//                                            }
-//                                            Log.d("POI Name: ", item.getPOIName().toString() + ", " +
-//                                                    "Address: " + item.getPOIAddress().replace("null", "")  + ", " +
-//                                                    "Point: " + item.getPOIPoint().toString());
-//                                        }
-//                                    }
-//                                });
-//                                try {
-//                                    ArrayList PoiItem = tmapdata.findAroundNamePOI(point,"편의점");
-//                                    for(int i = 0 ; i < PoiItem.size(); i++){
-//                                        TMapPOIItem  item = (TMapPOIItem) PoiItem.get(i);
-//                                        if(item.getPOIAddress().toString().equals(address.toString())){
-//                                            Log.d("지명",item.getPOIName().toString());
-//                                        }
-//                                        Log.d("POI Name: ", item.getPOIName().toString() + ", " +
-//                                                    "Address: " + item.getPOIAddress().replace("null", "")  + ", " +
-//                                                    "Point: " + item.getPOIPoint().toString());
-//                                    }
-//                                } catch (IOException e) {
-//                                    e.printStackTrace();
-//                                } catch (ParserConfigurationException e) {
-//                                    e.printStackTrace();
-//                                } catch (SAXException e) {
-//                                    e.printStackTrace();
-//                                }
 
                                 EditText editText = (EditText) findViewById(R.id.edit_start);
                                 Log.d("Start ",editText.toString());
@@ -276,42 +243,8 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                                 }
                             }
                         });
-
-                return false;
             }
 
-            @Override
-            public boolean onPressEvent(ArrayList markerlist,ArrayList poilist, TMapPoint point, PointF pointf) {
-//                TMapMarkerItem tItem = new TMapMarkerItem();
-//                tItem.setTMapPoint(point);
-//                tItem.setName("위치");
-//                tItem.setVisible(TMapMarkerItem.VISIBLE);
-//                Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_icon);
-//                tItem.setIcon(bitmap);
-//                tMapView.addMarkerItem("marker",tItem);
-//                TMapData tmapdata = new TMapData();
-//                tmapdata.convertGpsToAddress(point.getLatitude(), point.getLongitude(),
-//                        new TMapData.ConvertGPSToAddressListenerCallback() {
-//                            @Override
-//                            public void onConvertToGPSToAddress(String address) {
-//                                EditText editText = (EditText) findViewById(R.id.edit_start);
-//                                Log.d("Start ",editText.toString());
-//                                if(editText.getText().toString().equals("") || editText.getText().toString() == null) {
-//                                    TextInputLayout editTextHint = (TextInputLayout) findViewById(R.id.edit_start_hint);
-//                                    editTextHint.setHint(null);
-//                                    editText.setText(address);
-//                                }
-//                                else{
-//                                    editText = (EditText) findViewById(R.id.edit_end);
-//                                    TextInputLayout editTextHint = (TextInputLayout) findViewById(R.id.edit_end_hint);
-//                                    editTextHint.setHint(null);
-//                                    editText.setText(address);
-//                                }
-//                            }
-//                        });
-
-                return false;
-            }
         });
     }
 
