@@ -32,7 +32,13 @@ import com.skt.Tmap.TMapView;
 import com.skt.Tmap.poi_item.TMapPOIItem;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
+import org.xml.sax.SAXException;
+
+import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+
+import javax.xml.parsers.ParserConfigurationException;
 
 public class MainActivity extends AppCompatActivity implements TMapGpsManager.onLocationChangedCallback {
 
@@ -224,21 +230,44 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                 tItem.setIcon(bitmap);
                 tMapView.addMarkerItem("marker",tItem);
                 TMapData tmapdata = new TMapData();
+                // point.getLatitude(), point.getLongitude() 각각 위 경도,
                 tmapdata.convertGpsToAddress(point.getLatitude(), point.getLongitude(),
                         new TMapData.ConvertGPSToAddressListenerCallback() {
                             @Override
                             public void onConvertToGPSToAddress(String address) {
-//                            tmapdata.findAddressPOI(address, new TMapData.FindAddressPOIListenerCallback() {
-//                                @Override
-//                                public void onFindAddressPOI(ArrayList poiItem) {
-//                                    for(int i = 0 ; i < poiItem.size(); i++){
-//                                        TMapPOIItem  item = (TMapPOIItem) poiItem.get(i);
-//                                        Log.d("POI Name: ", item.getPOIName().toString() + ", " +
-//                                                "Address: " + item.getPOIAddress().replace("null", "")  + ", " +
-//                                                "Point: " + item.getPOIPoint().toString());
+//                                tmapdata.findAllPOI("숭실대학교", new TMapData.FindAllPOIListenerCallback() {
+//                                    @Override
+//                                    public void onFindAllPOI(ArrayList poiItem) {
+//                                        for(int i = 0 ; i < poiItem.size(); i++){
+//                                            TMapPOIItem  item = (TMapPOIItem) poiItem.get(i);
+//                                            if(item.getPOIAddress().toString().equals(address.toString())){
+//                                                address = item.getPOIAddress();
+//                                                break;
+//                                            }
+//                                            Log.d("POI Name: ", item.getPOIName().toString() + ", " +
+//                                                    "Address: " + item.getPOIAddress().replace("null", "")  + ", " +
+//                                                    "Point: " + item.getPOIPoint().toString());
+//                                        }
 //                                    }
+//                                });
+//                                try {
+//                                    ArrayList PoiItem = tmapdata.findAroundNamePOI(point,"편의점");
+//                                    for(int i = 0 ; i < PoiItem.size(); i++){
+//                                        TMapPOIItem  item = (TMapPOIItem) PoiItem.get(i);
+//                                        if(item.getPOIAddress().toString().equals(address.toString())){
+//                                            Log.d("지명",item.getPOIName().toString());
+//                                        }
+//                                        Log.d("POI Name: ", item.getPOIName().toString() + ", " +
+//                                                    "Address: " + item.getPOIAddress().replace("null", "")  + ", " +
+//                                                    "Point: " + item.getPOIPoint().toString());
+//                                    }
+//                                } catch (IOException e) {
+//                                    e.printStackTrace();
+//                                } catch (ParserConfigurationException e) {
+//                                    e.printStackTrace();
+//                                } catch (SAXException e) {
+//                                    e.printStackTrace();
 //                                }
-//                            });
 
                                 EditText editText = (EditText) findViewById(R.id.edit_start);
                                 Log.d("Start ",editText.toString());
