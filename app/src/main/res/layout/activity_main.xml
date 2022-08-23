@@ -141,6 +141,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:hint="출발 위치"
+                    android:id="@+id/edit_start_hint"
                     >
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/edit_start"
@@ -182,7 +183,8 @@
                     android:layout_width="250dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:hint="도착 위치">
+                    android:hint="도착 위치"
+                    android:id="@+id/edit_end_hint">
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/edit_end"
                         android:layout_width="match_parent"
