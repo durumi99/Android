@@ -9,7 +9,7 @@
     android:id="@+id/slidingView"
     app:umanoDragView="@id/dragView"
     app:umanoScrollableView="@id/listView"
-    app:umanoPanelHeight="150dp"
+    app:umanoPanelHeight="120dp"
     app:umanoOverlay="false"
     app:umanoParallaxOffset="200dp"
     app:umanoShadowHeight="5dp">
@@ -37,18 +37,17 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
+                    android:background="@color/transparent"
                     android:onClick="popClick"
                     android:padding="10dp"
-                    android:background="@color/transparent"
-                    android:src="@drawable/menu"/>
-
+                    android:src="@drawable/menu" />
 
 
                 <FrameLayout
+                    android:id="@+id/searchbarLayout_start"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="9dp"
-                    android:id="@+id/searchbarLayout_start"
                     android:padding="5dp"
                     android:visibility="invisible">
 
@@ -62,8 +61,7 @@
 
                         android:background="@drawable/border_searchbar"
                         android:hint="출발 위치 입력"
-                        android:paddingLeft="50dp"
-                        ></EditText>
+                        android:paddingLeft="50dp"></EditText>
 
                     <Button
                         android:id="@+id/backToMain_start"
@@ -72,15 +70,18 @@
                         android:layout_alignParentTop="true"
                         android:layout_marginLeft="60dp"
                         android:layout_marginTop="23dp"
-                        android:background="@drawable/ic_cancel" />
+                        android:backgroundTint="@color/black"
+
+                        android:background="@drawable/ic_cancel"
+                        />
 
                 </FrameLayout>
 
                 <FrameLayout
+                    android:id="@+id/searchbarLayout_end"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="9dp"
-                    android:id="@+id/searchbarLayout_end"
                     android:padding="5dp"
                     android:visibility="invisible">
 
@@ -94,8 +95,7 @@
 
                         android:background="@drawable/border_searchbar"
                         android:hint="도착 위치 입력"
-                        android:paddingLeft="50dp"
-                        ></EditText>
+                        android:paddingLeft="50dp"></EditText>
 
                     <Button
                         android:id="@+id/backToMain_end"
@@ -112,14 +112,23 @@
 
                 <ImageButton
                     android:id="@+id/CurrentLocate"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginRight="55dp"
+                    android:layout_marginBottom="75dp"
+                    android:src="@drawable/ic_gps"></ImageButton>
+
+                <ImageView
+                    android:id="@+id/CurrentLocateBackground"
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentBottom="true"
                     android:layout_marginRight="30dp"
                     android:layout_marginBottom="45dp"
-                    android:src="@drawable/ic_gps">
-                </ImageButton>
+                    app:srcCompat="@drawable/circle" />
 
             </RelativeLayout>
         </RelativeLayout>
@@ -165,22 +174,38 @@
                     ></ImageView>
 
                 //출발 위치 입력 폼
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="300dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:hint="출발 위치"
-                    android:id="@+id/edit_start_hint"
-                    >
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/edit_start"
-                        android:layout_width="match_parent"
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+                    <TextView
+                        android:background="@null"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:focusableInTouchMode="false"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginLeft="15dp"
+                        android:hint="출발지"
+                        android:textSize="10dp"
                         />
-                </com.google.android.material.textfield.TextInputLayout>
+
+                    <EditText
+                        android:background="@null"
+                        android:layout_width="300dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginLeft="15dp"
+                        android:hint="출발 위치"
+                        android:id="@+id/edit_start"
+                        />
+                    <View
+                        android:layout_width="300dp"
+                        android:layout_height="2dp"
+                        android:layout_alignBottom="@+id/edit_start"
+                        android:layout_marginLeft="15dp"
+
+                        android:background="#D3D3D3"/>
+                </RelativeLayout>
+
+
 
 
             </LinearLayout>
@@ -199,22 +224,32 @@
                     android:layout_marginTop="20dp"
                     android:layout_marginLeft="7dp"
                     ></ImageView>
+
                 //도착 위치 입력 폼
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="300dp"
-
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:hint="도착 위치"
-                    android:id="@+id/edit_end_hint">
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/edit_end"
-                        android:layout_width="match_parent"
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+                    <TextView
+                        android:background="@null"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:focusableInTouchMode="false"/>
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:layout_marginTop="0dp"
+                        android:layout_marginLeft="15dp"
+                        android:hint="도착지"
+                        android:textSize="10dp"
+                        />
 
+                    <EditText
+                        android:background="@null"
+                        android:layout_width="300dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginLeft="15dp"
+                        android:hint="도착 위치"
+                        android:id="@+id/edit_end"
+                        />
+
+                </RelativeLayout>
 
             </LinearLayout>
             //구분선

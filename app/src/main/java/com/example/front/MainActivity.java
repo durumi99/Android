@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.google.android.material.textfield.TextInputEditText;
@@ -53,7 +54,6 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
     EditText keywordView_end;
     double latitude;
     double longitude;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,6 +118,8 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
         //현위치로 돌아오는 버튼 객체 생성 & 클릭 이벤트
         ImageButton CurrentLocation = (ImageButton)findViewById(R.id.CurrentLocate);
+        ImageView CurrentLocationBackground = (ImageView)findViewById(R.id.CurrentLocateBackground);
+        CurrentLocationBackground.bringToFront();
         CurrentLocation.bringToFront();
         CurrentLocation.setBackgroundResource(R.drawable.ic_gps);
         CurrentLocation.setOnClickListener(new View.OnClickListener(){
@@ -131,32 +133,27 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         //여기 밑으로 시작경로랑 도착경로 searchbar 두개인데 코드 복붙이라 간결하게해야함..
 
         //출발지 선택시 searchbar 나타내며 수행할 것
-        TextInputEditText start_edit = (TextInputEditText) findViewById(R.id.edit_start);
+        EditText start_edit = (EditText) findViewById(R.id.edit_start);
+        start_edit.bringToFront();
         SlidingUpPanelLayout slidingView = (SlidingUpPanelLayout) findViewById(R.id.slidingView);
         int Height = slidingView.getPanelHeight();
         start_edit.setOnTouchListener(new View.OnTouchListener(){
             @Override
             public boolean onTouch(View view , MotionEvent event){
 
-                slidingView.setPanelHeight(0);
-                CurrentLocation.setVisibility(View.GONE);
-                optionButton.setVisibility(View.GONE);
-                searchbarLayout.setVisibility(View.VISIBLE);
+                hide(slidingView);
                 return true;
             }
         });
 
-        //searchbar에서 MAIN으로 돌아오는 BACKTO MAIN 객체 생성 & 클릭 이벤트
         Button backToMain = (Button) findViewById(R.id.backToMain_start);
         backToMain.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                slidingView.setPanelHeight(Height);
-                CurrentLocation.setVisibility(View.VISIBLE);
-                optionButton.setVisibility(View.VISIBLE);
-                searchbarLayout.setVisibility(View.INVISIBLE);
+                nonhide(slidingView);
             }
         });
+        //searchbar에서 MAIN으로 돌아오는 BACKTO MAIN 객체 생성 & 클릭 이벤트
         searchBar.setOnKeyListener(new View.OnKeyListener(){
             @Override
             public boolean onKey(View v, int keyCode,KeyEvent event){
@@ -176,16 +173,13 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         });
 
         //도착지 선택시 searchbar 나타내며 수행할 것
-        TextInputEditText edit_end = (TextInputEditText) findViewById(R.id.edit_end);
+        EditText edit_end = (EditText) findViewById(R.id.edit_end);
         int Height_end = slidingView.getPanelHeight();
         edit_end.setOnTouchListener(new View.OnTouchListener(){
             @Override
             public boolean onTouch(View view , MotionEvent event){
+                hide(slidingView);
 
-                slidingView.setPanelHeight(0);
-                CurrentLocation.setVisibility(View.GONE);
-                optionButton.setVisibility(View.GONE);
-                searchbarLayout_end.setVisibility(View.VISIBLE);
                 return true;
             }
         });
@@ -194,10 +188,8 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         backToMain_end.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                slidingView.setPanelHeight(Height_end);
-                CurrentLocation.setVisibility(View.VISIBLE);
-                optionButton.setVisibility(View.VISIBLE);
-                searchbarLayout_end.setVisibility(View.INVISIBLE);
+                nonhide(slidingView);
+
             }
         });
         searchBar_end.setOnKeyListener(new View.OnKeyListener(){
@@ -272,13 +264,13 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                                 EditText editText = (EditText) findViewById(R.id.edit_start);
                                 Log.d("Start ",editText.toString());
                                 if(editText.getText().toString().equals("") || editText.getText().toString() == null) {
-                                    TextInputLayout editTextHint = (TextInputLayout) findViewById(R.id.edit_start_hint);
+                                    EditText editTextHint = (EditText) findViewById(R.id.edit_start);
                                     editTextHint.setHint(null);
                                     editText.setText(address);
                                 }
                                 else{
                                     editText = (EditText) findViewById(R.id.edit_end);
-                                    TextInputLayout editTextHint = (TextInputLayout) findViewById(R.id.edit_end_hint);
+                                    EditText editTextHint = (EditText) findViewById(R.id.edit_end);
                                     editTextHint.setHint(null);
                                     editText.setText(address);
                                 }
@@ -323,16 +315,32 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         });
     }
 
+    private void hide(SlidingUpPanelLayout slidingView){
+        ImageButton CurrentLocation = (ImageButton)findViewById(R.id.CurrentLocate);
+        ImageButton optionButton = (ImageButton)findViewById(R.id.optionButton);
+        FrameLayout searchbarLayout = (FrameLayout) findViewById(R.id.searchbarLayout_start);
+        slidingView.setPanelHeight(0);
+        CurrentLocation.setVisibility(View.GONE);
+        optionButton.setVisibility(View.GONE);
+        searchbarLayout.setVisibility(View.VISIBLE);
 
+    }
+    private void nonhide(SlidingUpPanelLayout slidingView){
+        ImageButton CurrentLocation = (ImageButton)findViewById(R.id.CurrentLocate);
+        ImageButton optionButton = (ImageButton)findViewById(R.id.optionButton);
+        FrameLayout searchbarLayout = (FrameLayout) findViewById(R.id.searchbarLayout_start);
+
+        slidingView.setPanelHeight(340);
+        CurrentLocation.setVisibility(View.VISIBLE);
+        optionButton.setVisibility(View.VISIBLE);
+        searchbarLayout.setVisibility(View.GONE);
+    }
     private void search(int index){
         TMapPoint tpoint = tMapView.getLocationPoint();
         latitude = tpoint.getLatitude();
         longitude = tpoint.getLongitude();
-
-
         TMapData tmapdata = new TMapData();
         String keyword;
-        System.out.println("==================]"+" "+index);
         if(index==1)
             keyword = keywordView_start.getText().toString();
         else
@@ -358,7 +366,6 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                 }
             }
         });
-
     }
     public void addMarker(TMapPOIItem poi) {
         //point 객체
