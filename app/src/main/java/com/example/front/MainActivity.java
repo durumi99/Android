@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -98,7 +99,8 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         tMapGPS.OpenGps();
         tMapView.setTrackingMode(true);
         tMapView.setSightVisible(true);
-
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.ic_currenticon);
+        tMapView.setIcon(bitmap);
 
         ImageButton optionButton = (ImageButton)findViewById(R.id.optionButton);
         optionButton.bringToFront();
