@@ -65,13 +65,12 @@
 
                     <Button
                         android:id="@+id/backToMain_start"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:layout_alignParentTop="true"
                         android:layout_marginLeft="60dp"
-                        android:layout_marginTop="23dp"
+                        android:layout_marginTop="25dp"
                         android:backgroundTint="@color/black"
-
                         android:background="@drawable/ic_cancel"
                         />
 
@@ -128,7 +127,7 @@
                     android:layout_alignParentBottom="true"
                     android:layout_marginRight="30dp"
                     android:layout_marginBottom="45dp"
-                    app:srcCompat="@drawable/circle" />
+                    app:srcCompat="@drawable/ic_circle" />
 
             </RelativeLayout>
         </RelativeLayout>
