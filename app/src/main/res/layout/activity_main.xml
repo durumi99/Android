@@ -58,7 +58,6 @@
                         android:layout_alignParentTop="true"
                         android:layout_marginLeft="50dp"
                         android:layout_marginTop="10dp"
-
                         android:background="@drawable/border_searchbar"
                         android:hint="출발 위치 입력"
                         android:paddingLeft="50dp"></EditText>

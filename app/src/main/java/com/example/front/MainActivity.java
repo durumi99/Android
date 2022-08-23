@@ -105,8 +105,6 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         ImageButton optionButton = (ImageButton)findViewById(R.id.optionButton);
         optionButton.bringToFront();
 
-
-
         //searchBar 객체 생성 & 최상단으로 가져오기
         EditText searchBar = (EditText) findViewById(R.id.searchBar_start);
         searchBar.bringToFront();
@@ -332,21 +330,16 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                 Intent intent;
                 switch (item.getItemId()){
                     case R.id.menu1:
-                        //Toast.makeText(getApplicationContext(),"Select Menu1",Toast.LENGTH_SHORT).show();
-                        intent = new Intent(MainActivity.this,NoticeActivity.class);
-                        startActivity(intent);
-                        return true;
-                    case R.id.menu2:
                         //Toast.makeText(getApplicationContext(),"Select Menu2",Toast.LENGTH_SHORT).show();
                         intent = new Intent(MainActivity.this,FAQActivity.class);
                         startActivity(intent);
                         return true;
-                    case R.id.menu3:
+                    case R.id.menu2:
                         //Toast.makeText(getApplicationContext(),"Select Menu3",Toast.LENGTH_SHORT).show();
                         intent = new Intent(MainActivity.this,LoginActivity.class);
                         startActivity(intent);
                         return true;
-                    case R.id.menu4:
+                    case R.id.menu3:
                         //Toast.makeText(getApplicationContext(),"Select Menu4",Toast.LENGTH_SHORT).show();
                         intent = new Intent(MainActivity.this,ReportActivity.class);
                         startActivity(intent);
