@@ -120,29 +120,30 @@
                         android:background="@drawable/border_login"
                         android:orientation="vertical"
                         android:divider="@color/gray">
-                        <EditText
+                        <TextView
                             android:id="@+id/searchBar_start2"
                             android:layout_width="280dp"
                             android:layout_height="40dp"
                             android:background="@null"
-                            android:layout_gravity="center_vertical"
+                            android:gravity="left|center_vertical"
                             android:paddingLeft="5dp"
-                            android:layout_marginBottom="1dp">
-                        </EditText>
+                            android:textColor="@color/black">
+                        </TextView>
                         <View
                             android:id="@+id/divider"
                             android:layout_width="250dp"
                             android:layout_height="1dp"
                             android:layout_gravity="left"
                             android:background="@color/gray"/>
-                        <EditText
+                        <TextView
                             android:id="@+id/searchBar_end2"
                             android:layout_width="280dp"
                             android:layout_height="40dp"
                             android:background="@null"
                             android:paddingLeft="5dp"
-                            android:layout_gravity="center_vertical">
-                        </EditText>
+                            android:gravity="left|center_vertical"
+                            android:textColor="@color/black">
+                        </TextView>
 
                     </LinearLayout>
 
@@ -151,7 +152,7 @@
                         android:layout_width="15dp"
                         android:layout_height="15dp"
                         android:layout_alignParentTop="true"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginLeft="12dp"
                         android:layout_marginTop="15dp"
                         android:background="@drawable/ic_cancel"
                         android:backgroundTint="@color/black"/>
@@ -161,7 +162,7 @@
                         android:layout_height="20dp"
                         android:layout_alignParentTop="true"
                         android:layout_marginLeft="10dp"
-                        android:layout_marginTop="55dp"
+                        android:layout_marginTop="50dp"
                         android:background="@drawable/ic_switch"
                         android:backgroundTint="@color/black"
                         android:onClick="switchClick"/>
@@ -193,7 +194,74 @@
                     android:visibility="invisible"
                     android:onClick="confirmClick">
                 </Button>
-
+                <!--                경로 탐색-->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/Navigation"
+                    android:layout_width="match_parent"
+                    android:layout_height="130dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="-10dp"
+                    android:background="@drawable/border_login">
+                    <TextView
+                        android:id="@+id/Saferoute"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="안전경로"
+                        android:textSize="20dp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="20dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"/>
+                    <TextView
+                        android:id="@+id/Time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="8분"
+                        android:textSize="30dp"
+                        android:textStyle="bold"
+                        android:textColor="@color/purple_500"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="60dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent">
+                    </TextView>
+                    <TextView
+                        android:id="@+id/Route"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="572m"
+                        android:textSize="20dp"
+                        android:textColor="@color/black"
+                        android:layout_marginLeft="80dp"
+                        android:layout_marginTop="70dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent">
+                    </TextView>
+                    <TextView
+                        android:id="@+id/Detail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="경로상세"
+                        android:textSize="15dp"
+                        android:textColor="@color/purple_500"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginBottom="30dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintRight_toRightOf="parent">
+                    </TextView>
+                    <ImageButton
+                        android:id="@+id/DetailButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_detail"
+                        android:background="@color/transparent"
+                        android:layout_marginRight="24dp"
+                        android:layout_marginBottom="60dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
                 <ImageView
                     android:id="@+id/CurrentLocateBackground"
                     android:layout_width="75dp"

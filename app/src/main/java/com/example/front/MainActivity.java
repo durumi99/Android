@@ -2,6 +2,7 @@ package com.example.front;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.Manifest;
 import android.content.Context;
@@ -23,6 +24,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -34,6 +36,7 @@ import com.skt.Tmap.TMapView;
 import com.skt.Tmap.poi_item.TMapPOIItem;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
+import org.w3c.dom.Text;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
@@ -306,11 +309,11 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
             searchbarLayoutEnd.setVisibility(View.GONE);
         }
         else{
-            EditText searchBarStart = (EditText) findViewById(R.id.searchBar_start2);
+            TextView searchBarStart = (TextView) findViewById(R.id.searchBar_start2);
             EditText editStart = (EditText) findViewById(R.id.edit_start);
             editStart.setText(searchBarStart.getText().toString());
 
-            EditText searchBarEnd = (EditText) findViewById(R.id.searchBar_end2);
+            TextView searchBarEnd = (TextView) findViewById(R.id.searchBar_end2);
             EditText editEnd = (EditText) findViewById(R.id.edit_end);
             editEnd.setText(searchBarEnd.getText().toString());
 
@@ -408,9 +411,9 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         searchbarLayoutEnd.setVisibility(View.GONE);
 
         EditText editStart = (EditText) findViewById(R.id.edit_start);
-        EditText searchBar_start = (EditText) findViewById(R.id.searchBar_start2);
+        TextView searchBar_start = (TextView) findViewById(R.id.searchBar_start2);
         EditText editEnd = (EditText) findViewById(R.id.edit_end);
-        EditText searchBar_end = (EditText) findViewById(R.id.searchBar_end2);
+        TextView searchBar_end = (TextView) findViewById(R.id.searchBar_end2);
 
         searchBar_start.setText(editStart.getText().toString());
         searchBar_end.setText(editEnd.getText().toString());
@@ -421,11 +424,21 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         searchbarLayout.bringToFront();
 
         searchbarLayout.setVisibility(View.VISIBLE);
+
+        //확인 버튼
+        Button confirmButton = (Button)findViewById(R.id.confirm_button);
+        confirmButton.setVisibility(View.GONE);
+
+        ConstraintLayout navigation = (ConstraintLayout) findViewById(R.id.Navigation);
+        navigation.setVisibility(View.VISIBLE);
+        navigation.bringToFront();
+//        TextView safeRoute = (TextView) findViewById(R.id.Saferoute);
+//        safeRoute.setVisibility(View.VISIBLE);
     }
 
     public void switchClick(View view){
-        EditText searchBar_start = (EditText) findViewById(R.id.searchBar_start2);
-        EditText searchBar_end = (EditText) findViewById(R.id.searchBar_end2);
+        TextView searchBar_start = (TextView) findViewById(R.id.searchBar_start2);
+        TextView searchBar_end = (TextView) findViewById(R.id.searchBar_end2);
         String tmp = searchBar_start.getText().toString();
         searchBar_start.setText(searchBar_end.getText().toString());
         searchBar_end.setText(tmp);
