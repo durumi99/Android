@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
             @Override
             public boolean onTouch(View view , MotionEvent event){
 
-                hide(slidingView);
+                hide(slidingView,1);
                 return true;
             }
         });
@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         backToMain.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                nonhide(slidingView);
+                nonhide(slidingView,1);
             }
         });
         //searchbar에서 MAIN으로 돌아오는 BACKTO MAIN 객체 생성 & 클릭 이벤트
@@ -178,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         edit_end.setOnTouchListener(new View.OnTouchListener(){
             @Override
             public boolean onTouch(View view , MotionEvent event){
-                hide(slidingView);
+                hide(slidingView,0);
 
                 return true;
             }
@@ -188,7 +188,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         backToMain_end.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                nonhide(slidingView);
+                nonhide(slidingView,0);
 
             }
         });
@@ -248,28 +248,51 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         });
     }
 
-    private void hide(SlidingUpPanelLayout slidingView){
+    private void hide(SlidingUpPanelLayout slidingView,int check){
         ImageButton CurrentLocation = (ImageButton)findViewById(R.id.CurrentLocate);
         ImageButton optionButton = (ImageButton)findViewById(R.id.optionButton);
-        FrameLayout searchbarLayout = (FrameLayout) findViewById(R.id.searchbarLayout_start);
+        FrameLayout searchbarLayout;
         ImageView CurrentLocationBackground = (ImageView)findViewById(R.id.CurrentLocateBackground);
         CurrentLocationBackground.setVisibility(View.GONE);
         slidingView.setPanelHeight(0);
         CurrentLocation.setVisibility(View.GONE);
         optionButton.setVisibility(View.GONE);
+        if(check == 1) { // 출발
+            searchbarLayout = (FrameLayout) findViewById(R.id.searchbarLayout_start);
+            EditText searchBarStart = (EditText) findViewById(R.id.searchBar_start);
+            EditText editStart = (EditText) findViewById(R.id.edit_start);
+            searchBarStart.setText(editStart.getText().toString());
+        }
+        else{ // 도착
+            searchbarLayout = (FrameLayout) findViewById(R.id.searchbarLayout_end);
+            EditText searchBarEnd = (EditText) findViewById(R.id.searchBar_end);
+            EditText editEnd = (EditText) findViewById(R.id.edit_end);
+            searchBarEnd.setText(editEnd.getText().toString());
+        }
         searchbarLayout.setVisibility(View.VISIBLE);
-
+        //확인 버튼
+        Button confirmButton = (Button)findViewById(R.id.confirm_button);
+        confirmButton.setVisibility(View.VISIBLE);
     }
-    private void nonhide(SlidingUpPanelLayout slidingView){
+    private void nonhide(SlidingUpPanelLayout slidingView,int check){
         ImageButton CurrentLocation = (ImageButton)findViewById(R.id.CurrentLocate);
         ImageButton optionButton = (ImageButton)findViewById(R.id.optionButton);
-        FrameLayout searchbarLayout = (FrameLayout) findViewById(R.id.searchbarLayout_start);
+        FrameLayout searchbarLayout;
         ImageView CurrentLocationBackground = (ImageView)findViewById(R.id.CurrentLocateBackground);
         CurrentLocationBackground.setVisibility(View.VISIBLE);
         slidingView.setPanelHeight(340);
         CurrentLocation.setVisibility(View.VISIBLE);
         optionButton.setVisibility(View.VISIBLE);
+        if(check == 1){
+            searchbarLayout = (FrameLayout) findViewById(R.id.searchbarLayout_start);
+        }
+        else{
+            searchbarLayout = (FrameLayout) findViewById(R.id.searchbarLayout_end);
+        }
         searchbarLayout.setVisibility(View.GONE);
+        //확인 버튼
+        Button confirmButton = (Button)findViewById(R.id.confirm_button);
+        confirmButton.setVisibility(View.GONE);
     }
     private void search(int index){
         TMapPoint tpoint = tMapView.getLocationPoint();
@@ -330,17 +353,14 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                 Intent intent;
                 switch (item.getItemId()){
                     case R.id.menu1:
-                        //Toast.makeText(getApplicationContext(),"Select Menu2",Toast.LENGTH_SHORT).show();
                         intent = new Intent(MainActivity.this,FAQActivity.class);
                         startActivity(intent);
                         return true;
                     case R.id.menu2:
-                        //Toast.makeText(getApplicationContext(),"Select Menu3",Toast.LENGTH_SHORT).show();
                         intent = new Intent(MainActivity.this,LoginActivity.class);
                         startActivity(intent);
                         return true;
                     case R.id.menu3:
-                        //Toast.makeText(getApplicationContext(),"Select Menu4",Toast.LENGTH_SHORT).show();
                         intent = new Intent(MainActivity.this,ReportActivity.class);
                         startActivity(intent);
                         return true;
@@ -352,40 +372,6 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         });
         popM.show();
     }
-//
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        super.onCreateOptionsMenu(menu);
-//
-//        MenuInflater inflater = getMenuInflater();
-//        inflater.inflate(R.menu.main_menu, menu);
-//
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-//        super.onOptionsItemSelected(item);
-//        Toast toast = Toast.makeText(getApplicationContext(),"", Toast.LENGTH_LONG);
-//
-//        switch(item.getItemId())
-//        {
-//            case R.id.menu1:
-//                toast.setText("Select Menu1");
-//                break;
-//            case R.id.menu2:
-//                toast.setText("Select Menu2");
-//                break;
-//            case R.id.menu3:
-//                toast.setText("Select Menu3");
-//                break;
-//        }
-//
-//        toast.show();
-//
-//        return super.onOptionsItemSelected(item);
-//
-//    }
 
     @Override
     public void onLocationChange(Location location) {

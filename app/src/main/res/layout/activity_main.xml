@@ -69,9 +69,8 @@
                         android:layout_alignParentTop="true"
                         android:layout_marginLeft="60dp"
                         android:layout_marginTop="25dp"
-                        android:backgroundTint="@color/black"
                         android:background="@drawable/ic_cancel"
-                        />
+                        android:backgroundTint="@color/black" />
 
                 </FrameLayout>
 
@@ -106,6 +105,7 @@
 
                 </FrameLayout>
 
+
                 <!-- 현위치로 돌아오는 button-->
 
                 <ImageButton
@@ -117,6 +117,20 @@
                     android:layout_marginRight="55dp"
                     android:layout_marginBottom="75dp"
                     android:src="@drawable/ic_gps"></ImageButton>
+                <!--확인버튼                     -->
+
+                <Button
+                    android:id="@+id/confirm_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="-10dp"
+                    android:text="확인"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:visibility="invisible">
+
+                </Button>
 
                 <ImageView
                     android:id="@+id/CurrentLocateBackground"
@@ -282,7 +296,5 @@
             android:layout_width="match_parent"
             android:layout_height="350dp">
         </ListView>
-
     </LinearLayout>
-
 </com.sothree.slidinguppanel.SlidingUpPanelLayout>
