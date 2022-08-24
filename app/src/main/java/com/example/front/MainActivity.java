@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.PointF;
 import android.location.Location;
 import android.os.Build;
@@ -32,6 +33,7 @@ import com.skt.Tmap.TMapData;
 import com.skt.Tmap.TMapGpsManager;
 import com.skt.Tmap.TMapMarkerItem;
 import com.skt.Tmap.TMapPoint;
+import com.skt.Tmap.TMapPolyLine;
 import com.skt.Tmap.TMapView;
 import com.skt.Tmap.poi_item.TMapPOIItem;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
@@ -58,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
     EditText keywordView_end;
     double latitude;
     double longitude;
+    double startLatitude, startLongitude, destLatitude, destLongitude;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -217,6 +220,8 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         backToMain.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+                ConstraintLayout navigation = (ConstraintLayout) findViewById(R.id.Navigation);
+                navigation.setVisibility(View.GONE);
                 nonhide(slidingView,2);
             }
         });
@@ -245,12 +250,18 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                                     EditText editTextHint = (EditText) findViewById(R.id.edit_start);
                                     editTextHint.setHint(null);
                                     editText.setText(address);
+
+                                    startLatitude = point.getLatitude();
+                                    startLongitude =  point.getLongitude();
                                 }
                                 else{
                                     editText = (EditText) findViewById(R.id.edit_end);
                                     EditText editTextHint = (EditText) findViewById(R.id.edit_end);
                                     editTextHint.setHint(null);
                                     editText.setText(address);
+
+                                    destLatitude = point.getLatitude();
+                                    destLongitude =  point.getLongitude();
                                 }
                             }
                         });
@@ -432,8 +443,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         ConstraintLayout navigation = (ConstraintLayout) findViewById(R.id.Navigation);
         navigation.setVisibility(View.VISIBLE);
         navigation.bringToFront();
-//        TextView safeRoute = (TextView) findViewById(R.id.Saferoute);
-//        safeRoute.setVisibility(View.VISIBLE);
+
     }
 
     public void switchClick(View view){
