@@ -96,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 //        tMapGPS.setProvider(tMapGPS.NETWORK_PROVIDER);
         //gps 기반으로 위치 제공(에뮬레이터에서씀)
         tMapGPS.setProvider(tMapGPS.GPS_PROVIDER);
+
         tMapGPS.OpenGps();
         tMapView.setTrackingMode(true);
         tMapView.setSightVisible(true);
@@ -141,16 +142,16 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
             @Override
             public boolean onTouch(View view , MotionEvent event){
 
-                hide(slidingView,1);
+                hide(slidingView,0);
                 return true;
             }
         });
 
-        Button backToMain = (Button) findViewById(R.id.backToMain_start);
-        backToMain.setOnClickListener(new View.OnClickListener(){
+        Button backToMain_start = (Button) findViewById(R.id.backToMain_start);
+        backToMain_start.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                nonhide(slidingView,1);
+                nonhide(slidingView,0);
             }
         });
         //searchbar에서 MAIN으로 돌아오는 BACKTO MAIN 객체 생성 & 클릭 이벤트
@@ -171,14 +172,13 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                 return true;
             }
         });
-
         //도착지 선택시 searchbar 나타내며 수행할 것
         EditText edit_end = (EditText) findViewById(R.id.edit_end);
         int Height_end = slidingView.getPanelHeight();
         edit_end.setOnTouchListener(new View.OnTouchListener(){
             @Override
             public boolean onTouch(View view , MotionEvent event){
-                hide(slidingView,0);
+                hide(slidingView,1);
 
                 return true;
             }
@@ -188,7 +188,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         backToMain_end.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                nonhide(slidingView,0);
+                nonhide(slidingView,1);
 
             }
         });
@@ -210,6 +210,14 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
             }
         });
 
+        Button backToMain = (Button) findViewById(R.id.backToMain);
+        backToMain.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                nonhide(slidingView,2);
+            }
+        });
+        //지도 눌렀을때 주소 읽어옴
         tMapView.setOnLongClickListenerCallback(new TMapView.OnLongClickListenerCallback() {
 
             @Override
@@ -248,48 +256,67 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         });
     }
 
-    private void hide(SlidingUpPanelLayout slidingView,int check){
+    private void hide(SlidingUpPanelLayout slidingView,int check){ // 0 : start, 1 : end
         ImageButton CurrentLocation = (ImageButton)findViewById(R.id.CurrentLocate);
         ImageButton optionButton = (ImageButton)findViewById(R.id.optionButton);
-        FrameLayout searchbarLayout;
+        FrameLayout searchbarLayoutStart = (FrameLayout) findViewById(R.id.searchbarLayout_start);
+        FrameLayout searchbarLayoutEnd = (FrameLayout) findViewById(R.id.searchbarLayout_end);
         ImageView CurrentLocationBackground = (ImageView)findViewById(R.id.CurrentLocateBackground);
         CurrentLocationBackground.setVisibility(View.GONE);
         slidingView.setPanelHeight(0);
         CurrentLocation.setVisibility(View.GONE);
         optionButton.setVisibility(View.GONE);
-        if(check == 1) { // 출발
-            searchbarLayout = (FrameLayout) findViewById(R.id.searchbarLayout_start);
+        if(check == 0) {
             EditText searchBarStart = (EditText) findViewById(R.id.searchBar_start);
             EditText editStart = (EditText) findViewById(R.id.edit_start);
             searchBarStart.setText(editStart.getText().toString());
+            searchbarLayoutStart.setVisibility(View.VISIBLE);
         }
-        else{ // 도착
-            searchbarLayout = (FrameLayout) findViewById(R.id.searchbarLayout_end);
+        else {
             EditText searchBarEnd = (EditText) findViewById(R.id.searchBar_end);
             EditText editEnd = (EditText) findViewById(R.id.edit_end);
             searchBarEnd.setText(editEnd.getText().toString());
+            searchbarLayoutEnd.setVisibility(View.VISIBLE);
         }
-        searchbarLayout.setVisibility(View.VISIBLE);
+
         //확인 버튼
         Button confirmButton = (Button)findViewById(R.id.confirm_button);
         confirmButton.setVisibility(View.VISIBLE);
     }
-    private void nonhide(SlidingUpPanelLayout slidingView,int check){
+    private void nonhide(SlidingUpPanelLayout slidingView,int check){ // 0 : start, 1 : end
         ImageButton CurrentLocation = (ImageButton)findViewById(R.id.CurrentLocate);
         ImageButton optionButton = (ImageButton)findViewById(R.id.optionButton);
-        FrameLayout searchbarLayout;
+        FrameLayout searchbarLayoutStart = (FrameLayout) findViewById(R.id.searchbarLayout_start);
+        FrameLayout searchbarLayoutEnd = (FrameLayout) findViewById(R.id.searchbarLayout_end);
         ImageView CurrentLocationBackground = (ImageView)findViewById(R.id.CurrentLocateBackground);
         CurrentLocationBackground.setVisibility(View.VISIBLE);
         slidingView.setPanelHeight(340);
         CurrentLocation.setVisibility(View.VISIBLE);
         optionButton.setVisibility(View.VISIBLE);
-        if(check == 1){
-            searchbarLayout = (FrameLayout) findViewById(R.id.searchbarLayout_start);
+        if(check == 0) {
+            EditText searchBarStart = (EditText) findViewById(R.id.searchBar_start);
+            EditText editStart = (EditText) findViewById(R.id.edit_start);
+            editStart.setText(searchBarStart.getText().toString());
+            searchbarLayoutStart.setVisibility(View.GONE);
+        }
+        else if(check == 1) {
+            EditText searchBarEnd = (EditText) findViewById(R.id.searchBar_end);
+            EditText editEnd = (EditText) findViewById(R.id.edit_end);
+            editEnd.setText(searchBarEnd.getText().toString());
+            searchbarLayoutEnd.setVisibility(View.GONE);
         }
         else{
-            searchbarLayout = (FrameLayout) findViewById(R.id.searchbarLayout_end);
+            EditText searchBarStart = (EditText) findViewById(R.id.searchBar_start2);
+            EditText editStart = (EditText) findViewById(R.id.edit_start);
+            editStart.setText(searchBarStart.getText().toString());
+
+            EditText searchBarEnd = (EditText) findViewById(R.id.searchBar_end2);
+            EditText editEnd = (EditText) findViewById(R.id.edit_end);
+            editEnd.setText(searchBarEnd.getText().toString());
+
+            FrameLayout searchbarLayout = (FrameLayout) findViewById(R.id.searchbarLayout);
+            searchbarLayout.setVisibility(View.GONE);
         }
-        searchbarLayout.setVisibility(View.GONE);
         //확인 버튼
         Button confirmButton = (Button)findViewById(R.id.confirm_button);
         confirmButton.setVisibility(View.GONE);
@@ -373,6 +400,36 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         popM.show();
     }
 
+    public void confirmClick(View view){
+        FrameLayout searchbarLayoutStart = (FrameLayout) findViewById(R.id.searchbarLayout_start);
+        FrameLayout searchbarLayoutEnd = (FrameLayout) findViewById(R.id.searchbarLayout_end);
+        FrameLayout searchbarLayout = (FrameLayout) findViewById(R.id.searchbarLayout);
+        searchbarLayoutStart.setVisibility(View.GONE);
+        searchbarLayoutEnd.setVisibility(View.GONE);
+
+        EditText editStart = (EditText) findViewById(R.id.edit_start);
+        EditText searchBar_start = (EditText) findViewById(R.id.searchBar_start2);
+        EditText editEnd = (EditText) findViewById(R.id.edit_end);
+        EditText searchBar_end = (EditText) findViewById(R.id.searchBar_end2);
+
+        searchBar_start.setText(editStart.getText().toString());
+        searchBar_end.setText(editEnd.getText().toString());
+        searchBar_start.bringToFront();
+        View divider = (View) findViewById(R.id.divider);
+        divider.bringToFront();
+        searchBar_end.bringToFront();
+        searchbarLayout.bringToFront();
+
+        searchbarLayout.setVisibility(View.VISIBLE);
+    }
+
+    public void switchClick(View view){
+        EditText searchBar_start = (EditText) findViewById(R.id.searchBar_start2);
+        EditText searchBar_end = (EditText) findViewById(R.id.searchBar_end2);
+        String tmp = searchBar_start.getText().toString();
+        searchBar_start.setText(searchBar_end.getText().toString());
+        searchBar_end.setText(tmp);
+    }
     @Override
     public void onLocationChange(Location location) {
         tMapView.setLocationPoint(location.getLongitude(), location.getLatitude());

@@ -42,7 +42,6 @@
                     android:padding="10dp"
                     android:src="@drawable/menu" />
 
-
                 <FrameLayout
                     android:id="@+id/searchbarLayout_start"
                     android:layout_width="fill_parent"
@@ -53,7 +52,7 @@
 
                     <EditText
                         android:id="@+id/searchBar_start"
-                        android:layout_width="250dp"
+                        android:layout_width="300dp"
                         android:layout_height="50dp"
                         android:layout_alignParentTop="true"
                         android:layout_marginLeft="50dp"
@@ -84,12 +83,11 @@
 
                     <EditText
                         android:id="@+id/searchBar_end"
-                        android:layout_width="250dp"
+                        android:layout_width="300dp"
                         android:layout_height="50dp"
                         android:layout_alignParentTop="true"
                         android:layout_marginLeft="50dp"
                         android:layout_marginTop="10dp"
-
                         android:background="@drawable/border_searchbar"
                         android:hint="도착 위치 입력"
                         android:paddingLeft="50dp"></EditText>
@@ -105,6 +103,70 @@
 
                 </FrameLayout>
 
+                <FrameLayout
+                    android:id="@+id/searchbarLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginLeft="50dp"
+                    android:gravity="center_horizontal|top"
+                    android:visibility="invisible">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="40dp"
+                        android:paddingVertical="0dp"
+                        android:background="@drawable/border_login"
+                        android:orientation="vertical"
+                        android:divider="@color/gray">
+                        <EditText
+                            android:id="@+id/searchBar_start2"
+                            android:layout_width="280dp"
+                            android:layout_height="40dp"
+                            android:background="@null"
+                            android:layout_gravity="center_vertical"
+                            android:paddingLeft="5dp"
+                            android:layout_marginBottom="1dp">
+                        </EditText>
+                        <View
+                            android:id="@+id/divider"
+                            android:layout_width="250dp"
+                            android:layout_height="1dp"
+                            android:layout_gravity="left"
+                            android:background="@color/gray"/>
+                        <EditText
+                            android:id="@+id/searchBar_end2"
+                            android:layout_width="280dp"
+                            android:layout_height="40dp"
+                            android:background="@null"
+                            android:paddingLeft="5dp"
+                            android:layout_gravity="center_vertical">
+                        </EditText>
+
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/backToMain"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="15dp"
+                        android:background="@drawable/ic_cancel"
+                        android:backgroundTint="@color/black"/>
+                    <Button
+                        android:id="@+id/switching"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="55dp"
+                        android:background="@drawable/ic_switch"
+                        android:backgroundTint="@color/black"
+                        android:onClick="switchClick"/>
+
+                </FrameLayout>
 
                 <!-- 현위치로 돌아오는 button-->
 
@@ -128,8 +190,8 @@
                     android:text="확인"
                     android:textSize="20dp"
                     android:textStyle="bold"
-                    android:visibility="invisible">
-
+                    android:visibility="invisible"
+                    android:onClick="confirmClick">
                 </Button>
 
                 <ImageView
