@@ -297,7 +297,6 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
     private void hide(SlidingUpPanelLayout slidingView,int check){ // 0 : start, 1 : end
         slidingView.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-        Log.d("sliding view : ",String.valueOf(slidingView.getPanelState()));
         ImageButton CurrentLocation = (ImageButton)findViewById(R.id.CurrentLocate);
         ImageButton optionButton = (ImageButton)findViewById(R.id.optionButton);
         FrameLayout searchbarLayoutStart = (FrameLayout) findViewById(R.id.searchbarLayout_start);
@@ -352,6 +351,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
             TextView searchBarStart = (TextView) findViewById(R.id.searchBar_start2);
             EditText editStart = (EditText) findViewById(R.id.edit_start);
             editStart.setText(searchBarStart.getText().toString());
+
             TextView searchBarEnd = (TextView) findViewById(R.id.searchBar_end2);
             EditText editEnd = (EditText) findViewById(R.id.edit_end);
             editEnd.setText(searchBarEnd.getText().toString());
@@ -460,7 +460,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         searchBar_end2.setText(searchBar_end.getText().toString());
         searchBar_start2.bringToFront();
         divider.bringToFront();
-        searchBar_end2.bringToFront();
+        searchBar_end.bringToFront();
         searchbarLayout.bringToFront();
 
         searchbarLayout.setVisibility(View.VISIBLE);
@@ -472,36 +472,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         ConstraintLayout navigation = (ConstraintLayout) findViewById(R.id.Navigation);
         navigation.setVisibility(View.VISIBLE);
         navigation.bringToFront();
-        drawRoute();
-    }
 
-    private void drawRoute(){
-        TextView searchBar_start = (TextView) findViewById(R.id.searchBar_start2);
-        TextView searchBar_end = (TextView) findViewById(R.id.searchBar_end2);
-        String startAddress = searchBar_start.getText().toString();
-        String destAddress = searchBar_end.getText().toString();
-        Log.d("시작 주소 : ",startAddress);
-        Log.d("도착 주소 : ",destAddress);
-        TMapData tmapdata = new TMapData();
-        TMapPoint startpoint = new TMapPoint(startLatitude, startLongitude);
-        TMapPoint destpoint = new TMapPoint(destLatitude, destLongitude);
-        TMapMarkerItem startItem = new TMapMarkerItem();
-        TMapMarkerItem destItem = new TMapMarkerItem();
-
-        startItem.setTMapPoint(startpoint);
-        destItem.setTMapPoint(destpoint);
-        startItem.setName("출발지");
-        destItem.setName("목적지");
-        startItem.setVisible(TMapMarkerItem.VISIBLE);
-        destItem.setVisible(TMapMarkerItem.VISIBLE);
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.ic_current);
-        startItem.setIcon(bitmap);
-        bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.ic_icon);
-        destItem.setIcon(bitmap);
-
-        TMapView tmapview = new TMapView(this);
-        tmapview.addMarkerItem("출발지",startItem);
-        tmapview.addMarkerItem("목적지",destItem);
     }
 
     public void switchClick(View view){
@@ -517,7 +488,6 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         editState = true;
         isStart = false;
         hide(slidingView,1);
-        slidingView.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
     }
 
     public void setStartCurrent(){

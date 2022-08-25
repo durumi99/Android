@@ -8,7 +8,7 @@
     android:gravity="bottom"
     android:id="@+id/slidingView"
     app:umanoDragView="@id/dragView"
-    app:umanoScrollableView="@id/listView"
+    app:umanoScrollableView="@id/SearchListListView"
     app:umanoPanelHeight="120dp"
     app:umanoOverlay="false"
     app:umanoParallaxOffset="200dp"
@@ -180,20 +180,25 @@
                     android:layout_marginRight="55dp"
                     android:layout_marginBottom="75dp"
                     android:src="@drawable/ic_gps"></ImageButton>
-                <!--확인버튼                     -->
 
-                <Button
-                    android:id="@+id/confirm_button"
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="-10dp"
-                    android:text="확인"
-                    android:textSize="20dp"
-                    android:textStyle="bold"
-                    android:visibility="invisible"
-                    android:onClick="confirmClick">
-                </Button>
+
+
+
+<!--                &lt;!&ndash;확인버튼                     &ndash;&gt;-->
+
+<!--                <Button-->
+<!--                    android:id="@+id/confirm_button"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="100dp"-->
+<!--                    android:layout_alignParentBottom="true"-->
+<!--                    android:layout_marginBottom="-10dp"-->
+<!--                    android:text="확인"-->
+<!--                    android:textSize="20dp"-->
+<!--                    android:textStyle="bold"-->
+<!--                    android:visibility="invisible"-->
+<!--                    android:onClick="confirmClick">-->
+<!--                </Button>-->
+
                 <!--                경로 탐색-->
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/Navigation"
@@ -286,6 +291,7 @@
         android:focusable="false"
         android:orientation="vertical">
         //최상단 구분선
+
         <View
             android:layout_width="100dp"
             android:layout_height="8dp"
@@ -298,7 +304,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="250dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:id="@+id/dragview1"
+            >
             //horizontal linearlayout 뷰
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -345,16 +353,13 @@
                         android:layout_marginLeft="15dp"
                         android:background="#D3D3D3"/>
                 </RelativeLayout>
-
-
-
-
             </LinearLayout>
             //horizontal linearlayout 뷰
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:id="@+id/dragview2"
                 android:weightSum="2">
                 //도착위치 이미지뷰
                 <ImageView
@@ -435,9 +440,22 @@
 
         //최근 검색 보여줄 리스트뷰
         <ListView
-            android:id="@+id/listView"
+            android:id="@+id/HistoryListView"
             android:layout_width="match_parent"
-            android:layout_height="350dp">
-        </ListView>
+            android:layout_height="300dp"
+            android:layout_alignParentBottom="true"
+            android:visibility="visible"
+            android:background="@color/white"
+            />
+        <ListView
+            android:id="@+id/SearchListListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            android:layout_alignParentBottom="true"
+            android:visibility="invisible"
+            android:background="@color/white"
+            />
     </LinearLayout>
 </com.sothree.slidinguppanel.SlidingUpPanelLayout>
+
