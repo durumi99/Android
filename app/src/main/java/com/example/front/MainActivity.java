@@ -507,9 +507,10 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
     public void switchClick(View view){
         TextView searchBar_start = (TextView) findViewById(R.id.searchBar_start2);
         TextView searchBar_end = (TextView) findViewById(R.id.searchBar_end2);
-        String tmp = searchBar_start.getText().toString();
-        searchBar_start.setText(searchBar_end.getText().toString());
-        searchBar_end.setText(tmp);
+        String start = searchBar_start.getText().toString();
+        String end = searchBar_end.getText().toString();
+        searchBar_start.setText(end);
+        searchBar_end.setText(start);
     }
 
     public void mapClick(View view){
