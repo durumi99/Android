@@ -184,20 +184,20 @@
 
 
 
-<!--                &lt;!&ndash;확인버튼                     &ndash;&gt;-->
+                <!--확인버튼                     -->
 
-<!--                <Button-->
-<!--                    android:id="@+id/confirm_button"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="100dp"-->
-<!--                    android:layout_alignParentBottom="true"-->
-<!--                    android:layout_marginBottom="-10dp"-->
-<!--                    android:text="확인"-->
-<!--                    android:textSize="20dp"-->
-<!--                    android:textStyle="bold"-->
-<!--                    android:visibility="invisible"-->
-<!--                    android:onClick="confirmClick">-->
-<!--                </Button>-->
+                <Button
+                    android:id="@+id/confirm_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="-10dp"
+                    android:text="확인"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:visibility="invisible"
+                    android:onClick="confirmClick">
+                </Button>
 
                 <!--                경로 탐색-->
                 <androidx.constraintlayout.widget.ConstraintLayout
