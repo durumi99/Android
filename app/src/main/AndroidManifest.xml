@@ -20,6 +20,7 @@
         android:theme="@style/Theme.Front">
         <activity
             android:name=".MainActivity"
+
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

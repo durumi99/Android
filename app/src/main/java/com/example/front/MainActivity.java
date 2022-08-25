@@ -19,12 +19,17 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.google.android.material.textfield.TextInputEditText;
@@ -44,8 +49,14 @@ import org.xml.sax.SAXException;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
+
 
 public class MainActivity extends AppCompatActivity implements TMapGpsManager.onLocationChangedCallback {
 
@@ -54,6 +65,12 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
     // T Map View
     TMapView tMapView = null;
 
+    ArrayList<HashMap<String,String>> listviewlist=  new ArrayList<HashMap<String, String>>();
+    ArrayList<HashMap<String,String>> listviewresult=  new ArrayList<HashMap<String, String>>();;
+
+    ArrayList<String> listviewtmp;
+
+    SimpleAdapter Adapter;
     // T Map GPS
     TMapGpsManager tMapGPS = null;
     EditText keywordView_start;
@@ -99,9 +116,9 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
 
         //네트워크 기반으로 위치 제공(실제휴대폰)
-//        tMapGPS.setProvider(tMapGPS.NETWORK_PROVIDER);
+        tMapGPS.setProvider(tMapGPS.NETWORK_PROVIDER);
         //gps 기반으로 위치 제공(에뮬레이터에서씀)
-        tMapGPS.setProvider(tMapGPS.GPS_PROVIDER);
+        //tMapGPS.setProvider(tMapGPS.GPS_PROVIDER);
 
         tMapGPS.OpenGps();
         tMapView.setTrackingMode(true);
@@ -123,6 +140,9 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         FrameLayout searchbarLayout_end = (FrameLayout) findViewById(R.id.searchbarLayout_end);
         searchbarLayout_end.bringToFront();
 
+        //리스트뷰객체
+        ListView list = (ListView)findViewById(R.id.SearchListListView);
+
         //현위치로 돌아오는 버튼 객체 생성 & 클릭 이벤트
         ImageButton CurrentLocation = (ImageButton)findViewById(R.id.CurrentLocate);
         ImageView CurrentLocationBackground = (ImageView)findViewById(R.id.CurrentLocateBackground);
@@ -143,11 +163,9 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         EditText start_edit = (EditText) findViewById(R.id.edit_start);
         start_edit.bringToFront();
         SlidingUpPanelLayout slidingView = (SlidingUpPanelLayout) findViewById(R.id.slidingView);
-        int Height = slidingView.getPanelHeight();
         start_edit.setOnTouchListener(new View.OnTouchListener(){
             @Override
             public boolean onTouch(View view , MotionEvent event){
-
                 hide(slidingView,0);
                 return true;
             }
@@ -158,6 +176,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
             @Override
             public void onClick(View v){
                 nonhide(slidingView,0);
+                bindList(1);
             }
         });
         //searchbar에서 MAIN으로 돌아오는 BACKTO MAIN 객체 생성 & 클릭 이벤트
@@ -169,11 +188,14 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                         search(1);
                         break;
                     case KeyEvent.KEYCODE_DEL:
+                        list.setVisibility(View.INVISIBLE);
                         int length = searchBar.getText().length();
                         if (length > 0) {
                             searchBar.getText().delete(length -1, length);
                         }
                         break;
+                    case KeyEvent.KEYCODE_BACK:
+                        list.setVisibility(View.VISIBLE);
                 }
                 return true;
             }
@@ -204,6 +226,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                 switch(keyCode){
                     case KeyEvent.KEYCODE_ENTER:
                         search(2);
+
                         break;
                     case KeyEvent.KEYCODE_DEL:
                         int length = searchBar_end.getText().length();
@@ -211,6 +234,8 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                             searchBar_end.getText().delete(length -1, length);
                         }
                         break;
+
+
                 }
                 return true;
             }
@@ -271,15 +296,23 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
     }
 
     private void hide(SlidingUpPanelLayout slidingView,int check){ // 0 : start, 1 : end
+        LinearLayout dragview1 = (LinearLayout)findViewById(R.id.dragview1);
+        LinearLayout dragview2 = (LinearLayout)findViewById(R.id.dragview2);
+        ListView HistoryListView = (ListView)findViewById(R.id.HistoryListView);
         ImageButton CurrentLocation = (ImageButton)findViewById(R.id.CurrentLocate);
         ImageButton optionButton = (ImageButton)findViewById(R.id.optionButton);
         FrameLayout searchbarLayoutStart = (FrameLayout) findViewById(R.id.searchbarLayout_start);
         FrameLayout searchbarLayoutEnd = (FrameLayout) findViewById(R.id.searchbarLayout_end);
         ImageView CurrentLocationBackground = (ImageView)findViewById(R.id.CurrentLocateBackground);
+        ListView list = (ListView)findViewById(R.id.SearchListListView);
+        list.setVisibility(View.VISIBLE);
         CurrentLocationBackground.setVisibility(View.GONE);
-        slidingView.setPanelHeight(0);
+        //slidingView.setPanelHeight(0);
         CurrentLocation.setVisibility(View.GONE);
         optionButton.setVisibility(View.GONE);
+        dragview1.setVisibility(View.GONE);
+        dragview2.setVisibility(View.GONE);
+        HistoryListView.setVisibility(View.GONE);
         if(check == 0) {
             EditText searchBarStart = (EditText) findViewById(R.id.searchBar_start);
             EditText editStart = (EditText) findViewById(R.id.edit_start);
@@ -293,20 +326,45 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
             searchbarLayoutEnd.setVisibility(View.VISIBLE);
         }
 
+
         //확인 버튼
-        Button confirmButton = (Button)findViewById(R.id.confirm_button);
-        confirmButton.setVisibility(View.VISIBLE);
+//        Button confirmButton = (Button)findViewById(R.id.confirm_button);
+//        confirmButton.setVisibility(View.VISIBLE);
+    }
+
+    private void bindList(int delete) {
+        if(delete==1) {
+            listviewlist.clear();
+            return;
+        }
+        Adapter = new SimpleAdapter(this,listviewlist,android.R.layout.simple_list_item_2,new String[] {"item1","item2"},new int[] {android.R.id.text1, android.R.id.text2});
+
+        Adapter.notifyDataSetChanged();
+        ListView list = (ListView)findViewById(R.id.SearchListListView);
+        list.bringToFront();
+
+        list.setAdapter(Adapter);
+        list.setVisibility(View.VISIBLE);
     }
     private void nonhide(SlidingUpPanelLayout slidingView,int check){ // 0 : start, 1 : end
+
+        ListView HistoryListView = (ListView)findViewById(R.id.HistoryListView);
+        LinearLayout dragview1 = (LinearLayout)findViewById(R.id.dragview1);
+        LinearLayout dragview2 = (LinearLayout)findViewById(R.id.dragview2);
         ImageButton CurrentLocation = (ImageButton)findViewById(R.id.CurrentLocate);
         ImageButton optionButton = (ImageButton)findViewById(R.id.optionButton);
         FrameLayout searchbarLayoutStart = (FrameLayout) findViewById(R.id.searchbarLayout_start);
         FrameLayout searchbarLayoutEnd = (FrameLayout) findViewById(R.id.searchbarLayout_end);
         ImageView CurrentLocationBackground = (ImageView)findViewById(R.id.CurrentLocateBackground);
+        ListView list = (ListView)findViewById(R.id.SearchListListView);
+        list.setVisibility(View.INVISIBLE);
         CurrentLocationBackground.setVisibility(View.VISIBLE);
         slidingView.setPanelHeight(340);
         CurrentLocation.setVisibility(View.VISIBLE);
         optionButton.setVisibility(View.VISIBLE);
+        dragview1.setVisibility(View.VISIBLE);
+        dragview2.setVisibility(View.VISIBLE);
+        HistoryListView.setVisibility(View.VISIBLE);
         if(check == 0) {
             EditText searchBarStart = (EditText) findViewById(R.id.searchBar_start);
             EditText editStart = (EditText) findViewById(R.id.edit_start);
@@ -333,7 +391,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         }
         //확인 버튼
         Button confirmButton = (Button)findViewById(R.id.confirm_button);
-        confirmButton.setVisibility(View.GONE);
+        //confirmButton.setVisibility(View.GONE);
     }
     private void search(int index){
         TMapPoint tpoint = tMapView.getLocationPoint();
@@ -348,24 +406,61 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         TMapView tmapView = new TMapView(this);
         tmapView.setCenterPoint(longitude, latitude, false);
         tmapView.setLocationPoint(longitude, latitude);
+        listviewtmp = new ArrayList<>();
+        listviewlist.clear();
 
         tmapdata.findAroundNamePOI(tpoint, keyword, new TMapData.FindAroundNamePOIListenerCallback()
         {
             @Override
             public void onFindAroundNamePOI(final ArrayList<TMapPOIItem> poiItem) {
+                if (poiItem == null) return;
                 tMapView.removeAllMarkerItem();
                 for(int i = 0; i < poiItem.size(); i++) {
                     TMapPOIItem item = poiItem.get(i);
                     for (TMapPOIItem poi : poiItem) {
-                        addMarker(poi);
 
+                        //System.out.println(itemlist.containsValue(item.getPOIName().toString()));
+                        if(!listviewtmp.contains(item.getPOIName().toString())) {
+                            HashMap<String,String> itemlist = new HashMap<String, String>();
+
+                            System.out.println(item.name);
+                            listviewtmp.add(item.getPOIName().toString());
+                            itemlist.put("item1", item.getPOIName().toString());
+                            itemlist.put("item2", String.valueOf(Math.round(item.getDistance(tpoint)))+"m");
+
+                            listviewlist.add(itemlist);
+                        }
+
+                        addMarker(poi);
                     }
-                    Log.d("POI Name: ", item.getPOIName().toString() + ", " +
+
+                    Collections.sort(listviewlist, new Comparator<HashMap<String, String>>() {
+                        @Override
+                        public int compare(HashMap<String, String> o1, HashMap<String, String> o2) {
+                            String name1 = (String) o1.get("item2");
+                            String name2 = (String) o2.get("item2");
+                            if(name1.length()>name2.length()) {
+                                return name2.compareTo(name1);
+                            }
+                            else{
+                                return name1.compareTo(name2);
+                            }
+                        }
+                    });
+
+                    /*Log.d("POI Name: ", item.getPOIName().toString() + ", " +
                             "Address: " + item.getPOIAddress().replace("null", "")  + ", " +
-                            "Point: " + item.getPOIPoint().toString());
+                            "Point: " + item.getPOIPoint().toString());*/
                 }
+
             }
+
         });
+
+
+
+        bindList(0);
+
     }
     public void addMarker(TMapPOIItem poi) {
         //point 객체
@@ -436,9 +531,10 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
         searchbarLayout.setVisibility(View.VISIBLE);
 
+
         //확인 버튼
-        Button confirmButton = (Button)findViewById(R.id.confirm_button);
-        confirmButton.setVisibility(View.GONE);
+//        Button confirmButton = (Button)findViewById(R.id.confirm_button);
+//        confirmButton.setVisibility(View.GONE);
 
         ConstraintLayout navigation = (ConstraintLayout) findViewById(R.id.Navigation);
         navigation.setVisibility(View.VISIBLE);
