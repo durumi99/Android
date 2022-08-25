@@ -61,6 +61,8 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
     double latitude;
     double longitude;
     double startLatitude, startLongitude, destLatitude, destLongitude;
+    boolean isStart = false;
+    boolean editState = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -148,7 +150,8 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         start_edit.setOnTouchListener(new View.OnTouchListener(){
             @Override
             public boolean onTouch(View view , MotionEvent event){
-
+                editState = true;
+                isStart = true;
                 hide(slidingView,0);
                 return true;
             }
@@ -158,6 +161,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         backToMain_start.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+                editState = false;
                 nonhide(slidingView,0);
             }
         });
@@ -185,8 +189,9 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         edit_end.setOnTouchListener(new View.OnTouchListener(){
             @Override
             public boolean onTouch(View view , MotionEvent event){
+                editState = true;
+                isStart = false;
                 hide(slidingView,1);
-
                 return true;
             }
         });
@@ -195,6 +200,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         backToMain_end.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+                editState = false;
                 nonhide(slidingView,1);
 
             }
@@ -223,6 +229,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
             public void onClick(View v){
                 ConstraintLayout navigation = (ConstraintLayout) findViewById(R.id.Navigation);
                 navigation.setVisibility(View.GONE);
+                editState = false;
                 nonhide(slidingView,2);
             }
         });
@@ -232,6 +239,10 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
             @Override
             public void onLongPressEvent(ArrayList<TMapMarkerItem> arrayList, ArrayList<TMapPOIItem> arrayList1, TMapPoint point) {
+                Log.d("editState : ",String.valueOf(editState));
+                Log.d("isStart : ",String.valueOf(isStart));
+                if(editState == false)
+                    return;
                 TMapMarkerItem tItem = new TMapMarkerItem();
                 tItem.setTMapPoint(point);
                 tItem.setName("위치");
@@ -246,24 +257,31 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                             @Override
                             public void onConvertToGPSToAddress(String address) {
 
-                                EditText editText = (EditText) findViewById(R.id.edit_start);
-                                Log.d("Start ",editText.toString());
-                                if(editText.getText().toString().equals("") || editText.getText().toString() == null) {
-                                    EditText editTextHint = (EditText) findViewById(R.id.edit_start);
-                                    editTextHint.setHint(null);
-                                    editText.setText(address);
+//                                Log.d("Start ",editText.toString());
+//                                if(editText.getText().toString().equals("") || editText.getText().toString() == null) {
+                                if(isStart == true){
+                                    Log.d("tag","start");
+                                    Log.d("address : ",address);
+//                                    EditText editStart = (EditText) findViewById(R.id.edit_start);
                                     EditText searchBarStart = (EditText) findViewById(R.id.searchBar_start);
-                                    searchBarStart.setText(editText.getText().toString());
+//                                    editStart.setHint(null);
+//                                    editStart.setText(address);
+                                    searchBarStart.setText(address);
+//                                    Log.d("editStart : ",editStart.getText().toString());
+                                    Log.d("searchBarStart : ",searchBarStart.getText().toString());
                                     startLatitude = point.getLatitude();
                                     startLongitude =  point.getLongitude();
                                 }
                                 else{
-                                    editText = (EditText) findViewById(R.id.edit_end);
-                                    EditText editTextHint = (EditText) findViewById(R.id.edit_end);
-                                    editTextHint.setHint(null);
-                                    editText.setText(address);
+                                    Log.d("tag","end");
+                                    Log.d("address : ",address);
+//                                    EditText editEnd = (EditText) findViewById(R.id.edit_end);
                                     EditText searchBarEnd = (EditText) findViewById(R.id.searchBar_end);
-                                    searchBarEnd.setText(editText.getText().toString());
+//                                    editEnd.setHint(null);
+//                                    editEnd.setText(address);
+                                    searchBarEnd.setText(address);
+//                                    Log.d("editEnd : ",editEnd.getText().toString());
+                                    Log.d("searchBarEnd : ",searchBarEnd.getText().toString());
                                     destLatitude = point.getLatitude();
                                     destLongitude =  point.getLongitude();
                                 }
@@ -272,9 +290,13 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
             }
 
         });
+
+        //현재 위치를 시작 주소로
+        setStartCurrent();
     }
 
     private void hide(SlidingUpPanelLayout slidingView,int check){ // 0 : start, 1 : end
+        slidingView.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
         ImageButton CurrentLocation = (ImageButton)findViewById(R.id.CurrentLocate);
         ImageButton optionButton = (ImageButton)findViewById(R.id.optionButton);
         FrameLayout searchbarLayoutStart = (FrameLayout) findViewById(R.id.searchbarLayout_start);
@@ -419,6 +441,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
     }
 
     public void confirmClick(View view){
+        editState = false;
         FrameLayout searchbarLayoutStart = (FrameLayout) findViewById(R.id.searchbarLayout_start);
         FrameLayout searchbarLayoutEnd = (FrameLayout) findViewById(R.id.searchbarLayout_end);
         FrameLayout searchbarLayout = (FrameLayout) findViewById(R.id.searchbarLayout);
@@ -460,12 +483,27 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
     public void mapClick(View view){
         SlidingUpPanelLayout slidingView = (SlidingUpPanelLayout) findViewById(R.id.slidingView);
+        editState = true;
+        isStart = false;
         hide(slidingView,1);
-        slidingView.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+    }
+
+    public void setStartCurrent(){
+        TMapPoint tpoint = tMapView.getLocationPoint();
+        EditText start_edit = (EditText) findViewById(R.id.edit_start);
+        TMapData tmapdata = new TMapData();
+        tmapdata.convertGpsToAddress(tpoint.getLatitude(), tpoint.getLongitude(),
+                new TMapData.ConvertGPSToAddressListenerCallback() {
+                    @Override
+                    public void onConvertToGPSToAddress(String strAddress) {
+                        start_edit.setText(strAddress);
+                    }
+                });
     }
     @Override
     public void onLocationChange(Location location) {
         tMapView.setLocationPoint(location.getLongitude(), location.getLatitude());
         tMapView.setCenterPoint(location.getLongitude(), location.getLatitude());
+        setStartCurrent();
     }
 }
