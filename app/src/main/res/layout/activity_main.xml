@@ -351,7 +351,6 @@
                         android:layout_height="2dp"
                         android:layout_alignBottom="@+id/edit_start"
                         android:layout_marginLeft="15dp"
-
                         android:background="#D3D3D3"/>
                 </RelativeLayout>
             </LinearLayout>
@@ -385,7 +384,6 @@
                         android:hint="도착지"
                         android:textSize="10dp"
                         />
-
                     <EditText
                         android:background="@null"
                         android:layout_width="300dp"
@@ -395,7 +393,22 @@
                         android:hint="도착 위치"
                         android:id="@+id/edit_end"
                         />
-
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="20dp"
+                        android:background="@color/lightgray"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginLeft="320dp"/>
+                    <ImageButton
+                        android:id="@+id/map_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginLeft="340dp"
+                        android:src="@drawable/ic_map"
+                        android:background="@null"
+                        android:onClick="mapClick"
+                        />
                 </RelativeLayout>
 
             </LinearLayout>
