@@ -109,6 +109,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.ic_currenticon);
         tMapView.setIcon(bitmap);
 
+        // 옵션메뉴
         ImageButton optionButton = (ImageButton)findViewById(R.id.optionButton);
         optionButton.bringToFront();
 
@@ -225,6 +226,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                 nonhide(slidingView,2);
             }
         });
+
         //지도 눌렀을때 주소 읽어옴
         tMapView.setOnLongClickListenerCallback(new TMapView.OnLongClickListenerCallback() {
 
@@ -250,7 +252,8 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                                     EditText editTextHint = (EditText) findViewById(R.id.edit_start);
                                     editTextHint.setHint(null);
                                     editText.setText(address);
-
+                                    EditText searchBarStart = (EditText) findViewById(R.id.searchBar_start);
+                                    searchBarStart.setText(editText.getText().toString());
                                     startLatitude = point.getLatitude();
                                     startLongitude =  point.getLongitude();
                                 }
@@ -259,7 +262,8 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                                     EditText editTextHint = (EditText) findViewById(R.id.edit_end);
                                     editTextHint.setHint(null);
                                     editText.setText(address);
-
+                                    EditText searchBarEnd = (EditText) findViewById(R.id.searchBar_end);
+                                    searchBarEnd.setText(editText.getText().toString());
                                     destLatitude = point.getLatitude();
                                     destLongitude =  point.getLongitude();
                                 }
@@ -452,6 +456,12 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         String tmp = searchBar_start.getText().toString();
         searchBar_start.setText(searchBar_end.getText().toString());
         searchBar_end.setText(tmp);
+    }
+
+    public void mapClick(View view){
+        SlidingUpPanelLayout slidingView = (SlidingUpPanelLayout) findViewById(R.id.slidingView);
+        hide(slidingView,1);
+        slidingView.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
     }
     @Override
     public void onLocationChange(Location location) {
