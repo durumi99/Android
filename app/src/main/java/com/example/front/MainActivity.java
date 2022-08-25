@@ -317,11 +317,13 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
             EditText editEnd = (EditText) findViewById(R.id.edit_end);
             searchBarEnd.setText(editEnd.getText().toString());
             searchbarLayoutEnd.setVisibility(View.VISIBLE);
+            Button confirmButton = (Button)findViewById(R.id.confirm_button);
+            confirmButton.setVisibility(View.VISIBLE);
         }
 
         //확인 버튼
-        Button confirmButton = (Button)findViewById(R.id.confirm_button);
-        confirmButton.setVisibility(View.VISIBLE);
+//        Button confirmButton = (Button)findViewById(R.id.confirm_button);
+//        confirmButton.setVisibility(View.VISIBLE);
     }
     private void nonhide(SlidingUpPanelLayout slidingView,int check){ // 0 : start, 1 : end
         ImageButton CurrentLocation = (ImageButton)findViewById(R.id.CurrentLocate);
@@ -448,15 +450,15 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         searchbarLayoutStart.setVisibility(View.GONE);
         searchbarLayoutEnd.setVisibility(View.GONE);
 
-        EditText editStart = (EditText) findViewById(R.id.edit_start);
-        TextView searchBar_start = (TextView) findViewById(R.id.searchBar_start2);
-        EditText editEnd = (EditText) findViewById(R.id.edit_end);
-        TextView searchBar_end = (TextView) findViewById(R.id.searchBar_end2);
-
-        searchBar_start.setText(editStart.getText().toString());
-        searchBar_end.setText(editEnd.getText().toString());
-        searchBar_start.bringToFront();
+        EditText edit_start= (EditText) findViewById(R.id.edit_start);
+        TextView searchBar_start2 = (TextView) findViewById(R.id.searchBar_start2);
+        EditText searchBar_end = (EditText) findViewById(R.id.searchBar_end);
+        TextView searchBar_end2 = (TextView) findViewById(R.id.searchBar_end2);
         View divider = (View) findViewById(R.id.divider);
+
+        searchBar_start2.setText(edit_start.getText().toString());
+        searchBar_end2.setText(searchBar_end.getText().toString());
+        searchBar_start2.bringToFront();
         divider.bringToFront();
         searchBar_end.bringToFront();
         searchbarLayout.bringToFront();
@@ -491,12 +493,16 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
     public void setStartCurrent(){
         TMapPoint tpoint = tMapView.getLocationPoint();
         EditText start_edit = (EditText) findViewById(R.id.edit_start);
+        EditText searchBar_start = (EditText) findViewById(R.id.searchBar_start);
+        TextView searchBar_start2 = (TextView) findViewById(R.id.searchBar_start2);
         TMapData tmapdata = new TMapData();
         tmapdata.convertGpsToAddress(tpoint.getLatitude(), tpoint.getLongitude(),
                 new TMapData.ConvertGPSToAddressListenerCallback() {
                     @Override
                     public void onConvertToGPSToAddress(String strAddress) {
                         start_edit.setText(strAddress);
+                        searchBar_start.setText(strAddress);
+                        searchBar_start2.setText(strAddress);
                     }
                 });
     }
