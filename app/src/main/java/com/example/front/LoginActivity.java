@@ -5,6 +5,8 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -38,6 +40,11 @@ public class LoginActivity extends AppCompatActivity {
                     Intent intent = new Intent(getApplicationContext(),MainActivity.class);
                     intent.putExtra("name",name);
                     startActivityForResult(intent,1);
+                    if(false){// 로그인 성공시
+                        Menu menu = (Menu) findViewById(R.id.menu);
+                        MenuItem loginMenu = menu.findItem(1);
+                        loginMenu.setTitle("로그아웃");
+                    }
                 }
             }
         });
