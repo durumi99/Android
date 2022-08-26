@@ -524,6 +524,10 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
             FrameLayout searchbarLayout = (FrameLayout) findViewById(R.id.searchbarLayout);
             searchbarLayout.setVisibility(View.GONE);
+
+            dragview1.setVisibility(View.VISIBLE);
+            dragview2.setVisibility(View.VISIBLE);
+            HistoryListView.setVisibility(View.VISIBLE);
         }
         //확인 버튼
         Button confirmButton = (Button)findViewById(R.id.confirm_button);
@@ -652,11 +656,11 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                         startActivity(intent);
                         return true;
                     case R.id.menu2:
-                        if(true) {// 로그인 안되있으면
+                        if(true) { // 로그인
                             intent = new Intent(MainActivity.this, LoginActivity.class);
                             startActivity(intent);
                         }
-                        else{
+                        else{ // 로그 아웃
                             ;
                         }
                         return true;

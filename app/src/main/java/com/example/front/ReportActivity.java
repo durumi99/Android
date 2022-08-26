@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import androidx.activity.result.ActivityResult;
@@ -83,12 +85,25 @@ public class ReportActivity  extends AppCompatActivity {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                removeWholeText();
                 Intent intent = new Intent(ReportActivity.this, PopupActivity.class);
                 startActivity(intent);
             }
         });
 
     }
+
+    public void removeWholeText() {
+        EditText placeText = (EditText) findViewById(R.id.place);
+        EditText addressText = (EditText) findViewById(R.id.address);
+        EditText explainText = (EditText) findViewById(R.id.explain);
+        ImageView image = (ImageView) findViewById(R.id.iv_photo);
+        placeText.setText(null);
+        addressText.setText(null);
+        explainText.setText(null);
+        image.setImageResource(0);
+    }
+
     ActivityResultLauncher<Intent> startActivityResult = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>(){
