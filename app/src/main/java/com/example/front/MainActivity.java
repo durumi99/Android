@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
@@ -36,6 +37,7 @@ import com.skt.Tmap.TMapData;
 import com.skt.Tmap.TMapGpsManager;
 import com.skt.Tmap.TMapMarkerItem;
 import com.skt.Tmap.TMapPoint;
+import com.skt.Tmap.TMapPolyLine;
 import com.skt.Tmap.TMapView;
 import com.skt.Tmap.poi_item.TMapPOIItem;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
@@ -283,10 +285,8 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                 ConstraintLayout navigation = (ConstraintLayout) findViewById(R.id.Navigation);
                 navigation.setVisibility(View.GONE);
                 listviewchecker=false;
-
                 editState = false;
                 nonhide(slidingView,2);
-
             }
         });
 
@@ -742,23 +742,42 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         TMapData tmapdata = new TMapData();
         TMapPoint startpoint = new TMapPoint(startLatitude, startLongitude);
         TMapPoint destpoint = new TMapPoint(destLatitude, destLongitude);
-        TMapMarkerItem startItem = new TMapMarkerItem();
-        TMapMarkerItem destItem = new TMapMarkerItem();
+//        TMapMarkerItem startItem = new TMapMarkerItem();
+//        TMapMarkerItem destItem = new TMapMarkerItem();
+//
+//        startItem.setTMapPoint(startpoint);
+//        destItem.setTMapPoint(destpoint);
+//        startItem.setName("출발지");
+//        destItem.setName("목적지");
+//        startItem.setVisible(TMapMarkerItem.VISIBLE);
+//        destItem.setVisible(TMapMarkerItem.VISIBLE);
+//        Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.ic_current);
+//        startItem.setIcon(bitmap);
+//        bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.ic_icon);
+//        destItem.setIcon(bitmap);
+//        tMapView.addMarkerItem("출발지", startItem);
+//        tMapView.addMarkerItem("목적지",destItem);
 
-        startItem.setTMapPoint(startpoint);
-        destItem.setTMapPoint(destpoint);
-        startItem.setName("출발지");
-        destItem.setName("목적지");
-        startItem.setVisible(TMapMarkerItem.VISIBLE);
-        destItem.setVisible(TMapMarkerItem.VISIBLE);
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.ic_current);
-        startItem.setIcon(bitmap);
-        bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.ic_icon);
-        destItem.setIcon(bitmap);
+//        Bitmap start = BitmapFactory.decodeResource(getResources(),R.drawable.ic_current);
+//        Bitmap end = BitmapFactory.decodeResource(getResources(),R.drawable.ic_icon);
+//        tMapView.setTMapPathIcon(start, end);
 
-        TMapView tmapview = new TMapView(this);
-        tmapview.addMarkerItem("출발지",startItem);
-        tmapview.addMarkerItem("목적지",destItem);
+        tmapdata.findPathDataWithType(TMapData.TMapPathType.PEDESTRIAN_PATH,startpoint,destpoint, new TMapData.FindPathDataListenerCallback() {
+            @Override
+            public void onFindPathData(final TMapPolyLine path) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        path.setLineWidth(5);
+                        path.setLineColor(Color.RED);
+                        tMapView.addTMapPath(path);
+                        Bitmap start = BitmapFactory.decodeResource(getResources(),R.drawable.ic_current);
+                        Bitmap end = BitmapFactory.decodeResource(getResources(),R.drawable.ic_icon);
+                        tMapView.setTMapPathIcon(start, end);
+                    }
+                });
+            }
+        });
     }
     public void switchClick(View view){
         TextView searchBar_start = (TextView) findViewById(R.id.searchBar_start2);
