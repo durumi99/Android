@@ -572,7 +572,9 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         ConstraintLayout navigation = (ConstraintLayout) findViewById(R.id.Navigation);
         navigation.setVisibility(View.VISIBLE);
         navigation.bringToFront();
-        drawRoute();
+        drawRoute();//확인 버튼
+        Button confirmButton = (Button)findViewById(R.id.confirm_button);
+        confirmButton.setVisibility(View.GONE);
     }
     private void drawRoute(){
         TextView searchBar_start = (TextView) findViewById(R.id.searchBar_start2);

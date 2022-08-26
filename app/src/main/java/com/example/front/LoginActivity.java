@@ -1,12 +1,14 @@
 package com.example.front;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -39,5 +41,32 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+        //toggle
+        TextView signUp = (TextView) findViewById(R.id.signup);
+        TextView logIn = (TextView) findViewById(R.id.login);
+        Button submit = (Button) findViewById(R.id.submit);
+        View signUpUnderLine = (View) findViewById(R.id.signupunderline);
+        View logInUnderLine = (View) findViewById(R.id.loginunderline);
+        signUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                signUp.setTextColor(getResources().getColorStateList(R.color.black));
+                logIn.setTextColor(getResources().getColorStateList(R.color.gray));
+                submit.setText("Sign Up");
+                signUpUnderLine.setVisibility(View.VISIBLE);
+                logInUnderLine.setVisibility(View.GONE);
+            }
+        });
+        logIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                signUp.setTextColor(getResources().getColorStateList(R.color.gray));
+                logIn.setTextColor(getResources().getColorStateList(R.color.black));
+                submit.setText("Next");
+                signUpUnderLine.setVisibility(View.GONE);
+                logInUnderLine.setVisibility(View.VISIBLE);
+            }
+        });
     }
+
 }
