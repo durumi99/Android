@@ -467,6 +467,15 @@
             android:visibility="invisible"
             android:background="@color/white"
             />
+        <ListView
+            android:id="@+id/SearchListEndListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            android:layout_alignParentBottom="true"
+            android:visibility="invisible"
+            android:background="@color/white"
+            />
     </LinearLayout>
 </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 
