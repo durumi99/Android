@@ -225,7 +225,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
             @Override
             public void onClick(View v){
                 editState = false;
-                nonhide(slidingView,2);
+                nonhide(slidingView,1);
 
             }
         });
