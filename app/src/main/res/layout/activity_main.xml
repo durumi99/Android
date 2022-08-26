@@ -104,6 +104,35 @@
                 </FrameLayout>
 
                 <FrameLayout
+                    android:id="@+id/searchbarLayout_charge"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="9dp"
+                    android:padding="5dp"
+                    android:visibility="invisible">
+
+                    <EditText
+                        android:id="@+id/searchbarLayout_charge_edit"
+                        android:layout_width="300dp"
+                        android:layout_height="50dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginLeft="50dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/border_searchbar"
+                        android:text="휠체어 충전"
+                        android:paddingLeft="50dp"></EditText>
+
+                    <Button
+                        android:id="@+id/backToMain_charge"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginLeft="60dp"
+                        android:layout_marginTop="23dp"
+                        android:background="@drawable/ic_cancel" />
+
+                </FrameLayout>
+                <FrameLayout
                     android:id="@+id/searchbarLayout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -314,7 +343,7 @@
         //vertical 뷰
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="200dp"
             android:orientation="vertical"
             android:id="@+id/dragview1"
             >
@@ -432,6 +461,7 @@
                 android:background="#D3D3D3"/>
             //가까운 충전소 찾기 버튼
             <Button
+                    android:id="@+id/ChargingSpace"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/white"
@@ -440,6 +470,7 @@
                 android:gravity="left"
                 android:text="가까운 충전소 찾기"
                 android:drawableLeft="@drawable/ic_charging"
+                android:onClick="ChargingClick"
                 >
             </Button>
             //구분선
@@ -447,22 +478,27 @@
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
                 android:background="#D3D3D3"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="최근검색"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                />
         </LinearLayout>
 
         //최근 검색 보여줄 리스트뷰
         <ListView
             android:id="@+id/HistoryListView"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="200dp"
             android:layout_alignParentBottom="true"
             android:visibility="visible"
-            android:background="@color/white"
             />
         <ListView
             android:id="@+id/SearchListListView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-
             android:layout_alignParentBottom="true"
             android:visibility="invisible"
             android:background="@color/white"
@@ -471,7 +507,6 @@
             android:id="@+id/SearchListEndListView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-
             android:layout_alignParentBottom="true"
             android:visibility="invisible"
             android:background="@color/white"

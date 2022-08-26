@@ -5,12 +5,10 @@ import androidx.appcompat.widget.PopupMenu;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.PointF;
+
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,7 +17,6 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -34,30 +31,19 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
+
 import com.skt.Tmap.TMapData;
 import com.skt.Tmap.TMapGpsManager;
 import com.skt.Tmap.TMapMarkerItem;
 import com.skt.Tmap.TMapPoint;
-import com.skt.Tmap.TMapPolyLine;
 import com.skt.Tmap.TMapView;
 import com.skt.Tmap.poi_item.TMapPOIItem;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
-import org.w3c.dom.Text;
-import org.xml.sax.SAXException;
-
-import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.List;
-
-import javax.xml.parsers.ParserConfigurationException;
 
 class pair implements Comparable<pair>{
     double x;
@@ -84,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
     ArrayList<HashMap<String,String>> listviewlist=  new ArrayList<HashMap<String, String>>();
     ArrayList<HashMap<String,Double>> listview_xy=  new ArrayList<HashMap<String, Double>>();
+    ArrayList<String> listviewsearchedlist= new ArrayList<>();
     ArrayList<String> listviewtmp;
     ArrayList<pair> al = new ArrayList<>();
 
@@ -205,8 +192,14 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                 editState = false;
                 listviewchecker=true;
                 nonhide(slidingView,0);
+
                 bindList(1,1);
                 tMapView.removeAllMarkerItem();
+                searchedlist();
+
+                ListView HistoryListView = (ListView)findViewById(R.id.HistoryListView);
+                HistoryListView.bringToFront();
+                HistoryListView.setVisibility(View.VISIBLE);
             }
         });
         //searchbar에서 MAIN으로 돌아오는 BACKTO MAIN 객체 생성 & 클릭 이벤트
@@ -289,13 +282,26 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
             public void onClick(View v){
                 ConstraintLayout navigation = (ConstraintLayout) findViewById(R.id.Navigation);
                 navigation.setVisibility(View.GONE);
-                System.out.println("hi");
+                listviewchecker=false;
+
                 editState = false;
                 nonhide(slidingView,2);
 
             }
         });
 
+        Button backToMain_charge = (Button) findViewById(R.id.backToMain_charge);
+        backToMain_charge.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                FrameLayout searchbarLayout_charge = (FrameLayout) findViewById(R.id.searchbarLayout_charge);
+                searchbarLayout_charge.setVisibility(View.INVISIBLE);
+                editState = false;
+                listviewchecker=false;
+                nonhide(slidingView,1);
+                bindList(1,0);
+            }
+        });
         //지도 눌렀을때 주소 읽어옴
         tMapView.setOnLongClickListenerCallback(new TMapView.OnLongClickListenerCallback() {
 
@@ -362,7 +368,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
             @Override
             public void onItemClick(AdapterView<?> a_parent, View a_view, int position, long a_id) {
                 searchBar.setText(al.get(position).name);
-                System.out.println("시작"+al.get(position).name);
+                listviewsearchedlist.add(0,al.get(position).name);
                 startLatitude = al.get(position).x;
                 startLongitude = al.get(position).y;
                 Toast.makeText(MainActivity.this, (al.get(position).name)+ " 선택하였습니다.", Toast.LENGTH_SHORT).show();
@@ -370,6 +376,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                 addMarker(startLatitude,startLongitude,al.get(position).name);
                 TMapMarkerItem markeritem = new TMapMarkerItem();
                 tMapView.addMarkerItem("select", markeritem);
+
             }
         });
 
@@ -377,7 +384,8 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
             @Override
             public void onItemClick(AdapterView<?> a_parent, View a_view, int position, long a_id) {
                 searchBar_end.setText(al.get(position).name);
-                System.out.println("종료"+al.get(position).name);
+                listviewsearchedlist.add(0,al.get(position).name);
+
                 destLatitude = al.get(position).x;
                 destLongitude = al.get(position).y;
                 Toast.makeText(MainActivity.this, (al.get(position).name)+ " 선택하였습니다.", Toast.LENGTH_SHORT).show();
@@ -385,6 +393,11 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                 addMarker(startLatitude,startLongitude,al.get(position).name);
                 TMapMarkerItem markeritem = new TMapMarkerItem();
                 tMapView.addMarkerItem("select", markeritem);
+                confirmClick(listend);
+                listend.setVisibility(View.INVISIBLE);
+                slidingView.setPanelHeight(0);
+                searchedlist();
+
             }
         });
     }
@@ -435,6 +448,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                 confirmButton.setVisibility(View.VISIBLE);
                 slidingView.setPanelHeight(0);
             }
+
         }
 
     }
@@ -469,6 +483,15 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
             listend.setAdapter(Adapter);
             listend.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void searchedlist() {
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listviewsearchedlist) ;
+        ListView list = (ListView) findViewById(R.id.HistoryListView);
+        list.setAdapter(adapter);
+        list.setVisibility(View.VISIBLE);
+
     }
 
     private void nonhide(SlidingUpPanelLayout slidingView,int check){ // 0 : start, 1 : end, 2 : map button
@@ -744,6 +767,39 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         searchBar_start.setText(searchBar_end.getText().toString());
         searchBar_end.setText(tmp);
     }
+
+    public void ChargingClick(View view){
+        SlidingUpPanelLayout slidingView = (SlidingUpPanelLayout) findViewById(R.id.slidingView);
+
+        LinearLayout dragview1 = (LinearLayout)findViewById(R.id.dragview1);
+        LinearLayout dragview2 = (LinearLayout)findViewById(R.id.dragview2);
+        ListView HistoryListView = (ListView)findViewById(R.id.HistoryListView);
+        slidingView.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+        Log.d("sliding view : ",String.valueOf(slidingView.getPanelState()));
+        ImageButton CurrentLocation = (ImageButton)findViewById(R.id.CurrentLocate);
+        ImageButton optionButton = (ImageButton)findViewById(R.id.optionButton);
+        FrameLayout searchbarLayout_charge = (FrameLayout) findViewById(R.id.searchbarLayout_charge);
+        ImageView CurrentLocationBackground = (ImageView)findViewById(R.id.CurrentLocateBackground);
+        ListView list = (ListView)findViewById(R.id.SearchListListView);
+        ListView listend = (ListView)findViewById(R.id.SearchListEndListView);
+
+        list.setVisibility(View.INVISIBLE);
+        listend.setVisibility(View.INVISIBLE);
+
+        CurrentLocationBackground.setVisibility(View.GONE);
+
+        CurrentLocation.setVisibility(View.GONE);
+        optionButton.setVisibility(View.GONE);
+
+        searchbarLayout_charge.bringToFront();
+        searchbarLayout_charge.setVisibility(View.VISIBLE);
+
+        dragview1.setVisibility(View.GONE);
+        dragview2.setVisibility(View.GONE);
+        HistoryListView.setVisibility(View.GONE);
+
+    }
+
 
     public void mapClick(View view){
         SlidingUpPanelLayout slidingView = (SlidingUpPanelLayout) findViewById(R.id.slidingView);
