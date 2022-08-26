@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
             @Override
             public boolean onTouch(View view , MotionEvent event){
 
-                editState = true;
+                editState = false;
                 isStart = true;
                 hide(slidingView,0);
                 return true;
@@ -213,7 +213,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         edit_end.setOnTouchListener(new View.OnTouchListener(){
             @Override
             public boolean onTouch(View view , MotionEvent event){
-                editState = true;
+                editState = false;
                 isStart = false;
                 hide(slidingView,1);
                 return true;
@@ -322,7 +322,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         setStartCurrent();
     }
 
-    private void hide(SlidingUpPanelLayout slidingView,int check){ // 0 : start, 1 : end
+    private void hide(SlidingUpPanelLayout slidingView,int check){ // 0 : start, 1 : end // map button
         LinearLayout dragview1 = (LinearLayout)findViewById(R.id.dragview1);
         LinearLayout dragview2 = (LinearLayout)findViewById(R.id.dragview2);
         ListView HistoryListView = (ListView)findViewById(R.id.HistoryListView);
@@ -348,14 +348,17 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
             dragview1.setVisibility(View.GONE);
             dragview2.setVisibility(View.GONE);
             HistoryListView.setVisibility(View.GONE);
+            slidingView.setPanelHeight(0);
         }
         else {
             EditText searchBarEnd = (EditText) findViewById(R.id.searchBar_end);
             EditText editEnd = (EditText) findViewById(R.id.edit_end);
             searchBarEnd.setText(editEnd.getText().toString());
             searchbarLayoutEnd.setVisibility(View.VISIBLE);
-            Button confirmButton = (Button)findViewById(R.id.confirm_button);
-            confirmButton.setVisibility(View.VISIBLE);
+            if(check == 2) {
+                Button confirmButton = (Button) findViewById(R.id.confirm_button);
+                confirmButton.setVisibility(View.VISIBLE);
+            }
             slidingView.setPanelHeight(0);
         }
 
@@ -396,6 +399,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         if(check == 0) {
             EditText searchBarStart = (EditText) findViewById(R.id.searchBar_start);
             EditText editStart = (EditText) findViewById(R.id.edit_start);
+            Log.v("searchBarStart : ",searchBarStart.getText().toString());
             editStart.setText(searchBarStart.getText().toString());
             searchbarLayoutStart.setVisibility(View.GONE);
             dragview1.setVisibility(View.VISIBLE);
@@ -422,7 +426,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         }
         //확인 버튼
         Button confirmButton = (Button)findViewById(R.id.confirm_button);
-        //confirmButton.setVisibility(View.GONE);
+        confirmButton.setVisibility(View.GONE);
     }
     private void search(int index){
         TMapPoint tpoint = tMapView.getLocationPoint();
@@ -610,7 +614,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         SlidingUpPanelLayout slidingView = (SlidingUpPanelLayout) findViewById(R.id.slidingView);
         editState = true;
         isStart = false;
-        hide(slidingView,1);
+        hide(slidingView,2);
         slidingView.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
     }
 
