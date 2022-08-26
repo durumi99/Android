@@ -225,7 +225,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
             @Override
             public void onClick(View v){
                 editState = false;
-                nonhide(slidingView,1);
+                nonhide(slidingView,2);
 
             }
         });
@@ -322,7 +322,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         setStartCurrent();
     }
 
-    private void hide(SlidingUpPanelLayout slidingView,int check){ // 0 : start, 1 : end // map button
+    private void hide(SlidingUpPanelLayout slidingView,int check){ // 0 : start, 1 : end ,2 : map button
         LinearLayout dragview1 = (LinearLayout)findViewById(R.id.dragview1);
         LinearLayout dragview2 = (LinearLayout)findViewById(R.id.dragview2);
         ListView HistoryListView = (ListView)findViewById(R.id.HistoryListView);
@@ -379,7 +379,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         list.setVisibility(View.VISIBLE);
 
     }
-    private void nonhide(SlidingUpPanelLayout slidingView,int check){ // 0 : start, 1 : end
+    private void nonhide(SlidingUpPanelLayout slidingView,int check){ // 0 : start, 1 : end, 2 : map button
 
         ListView HistoryListView = (ListView)findViewById(R.id.HistoryListView);
         LinearLayout dragview1 = (LinearLayout)findViewById(R.id.dragview1);
