@@ -593,8 +593,13 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                         startActivity(intent);
                         return true;
                     case R.id.menu2:
-                        intent = new Intent(MainActivity.this,LoginActivity.class);
-                        startActivity(intent);
+                        if(true) {// 로그인 안되있으면
+                            intent = new Intent(MainActivity.this, LoginActivity.class);
+                            startActivity(intent);
+                        }
+                        else{
+                            ;
+                        }
                         return true;
                     case R.id.menu3:
                         intent = new Intent(MainActivity.this,ReportActivity.class);
