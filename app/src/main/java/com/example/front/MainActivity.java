@@ -602,9 +602,9 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
                         }
                     }
-
-                    Collections.sort(al);
-
+                    if(!al.isEmpty())
+                        Collections.sort(al);
+                    if(!listviewlist.isEmpty())
                     Collections.sort(listviewlist, new Comparator<HashMap<String, String>>() {
                         @Override
                         public int compare(HashMap<String, String> o1, HashMap<String, String> o2) {
