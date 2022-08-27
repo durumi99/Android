@@ -768,8 +768,8 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        path.setLineWidth(5);
-                        path.setLineColor(Color.RED);
+                        path.setLineWidth(20);
+                        path.setLineColor(Color.BLUE);
                         tMapView.addTMapPath(path);
                         Bitmap start = BitmapFactory.decodeResource(getResources(),R.drawable.ic_current);
                         Bitmap end = BitmapFactory.decodeResource(getResources(),R.drawable.ic_icon);

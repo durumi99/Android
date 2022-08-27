@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
@@ -85,6 +86,9 @@ public class ReportActivity  extends AppCompatActivity {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(checkInput() == false){
+                    return;
+                }
                 removeWholeText();
                 Intent intent = new Intent(ReportActivity.this, PopupActivity.class);
                 startActivity(intent);
@@ -92,7 +96,25 @@ public class ReportActivity  extends AppCompatActivity {
         });
 
     }
-
+    public boolean checkInput(){
+        EditText placeText = (EditText) findViewById(R.id.place);
+        EditText addressText = (EditText) findViewById(R.id.address);
+        EditText explainText = (EditText) findViewById(R.id.explain);
+        boolean check = true;
+        if(placeText.getText().toString().equals("") || placeText.getText().toString() == null){
+            placeText.setBackgroundResource(R.drawable.red_edittext);
+            check = false;
+        }
+        if(addressText.getText().toString().equals("") || addressText.getText().toString() == null){
+            addressText.setBackgroundResource(R.drawable.red_edittext);
+            check = false;
+        }
+        if(explainText.getText().toString().equals("") || explainText.getText().toString() == null){
+            explainText.setBackgroundResource(R.drawable.red_edittext);
+            check = false;
+        }
+        return check;
+    }
     public void removeWholeText() {
         EditText placeText = (EditText) findViewById(R.id.place);
         EditText addressText = (EditText) findViewById(R.id.address);

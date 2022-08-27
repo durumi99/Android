@@ -11,4 +11,5 @@
     <color name="lightgray">#FFDDDDDD</color>
     <color name="deepgray">#8A8A8F</color>
     <color name="transparent">#00000000</color>
+    <color name="red">#FFFF0000</color>
 </resources>
