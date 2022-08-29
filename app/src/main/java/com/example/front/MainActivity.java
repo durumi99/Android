@@ -63,7 +63,7 @@ class pair implements Comparable<pair>{
     }
     @Override
     public int compareTo(pair p) {
-        return Double.compare(this.distance, p.distance);
+        return (int)(this.distance-p.distance);
     }
 }
 public class MainActivity extends AppCompatActivity implements TMapGpsManager.onLocationChangedCallback {
@@ -184,9 +184,13 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                 editState = false;
                 isStart = true;
                 listviewchecker=true;
+
                 list.setVisibility(View.VISIBLE);
                 list.bringToFront();
                 hide(slidingView,0);
+
+                listend.setVisibility(View.GONE);
+
                 return true;
             }
         });
@@ -205,6 +209,8 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                 ListView HistoryListView = (ListView)findViewById(R.id.HistoryListView);
                 HistoryListView.bringToFront();
                 HistoryListView.setVisibility(View.VISIBLE);
+
+
             }
         });
         //searchbar에서 MAIN으로 돌아오는 BACKTO MAIN 객체 생성 & 클릭 이벤트
@@ -215,7 +221,6 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                     case KeyEvent.KEYCODE_ENTER:
                         al.clear();
                         search(1);
-
                         break;
                     case KeyEvent.KEYCODE_DEL:
                         list.setVisibility(View.INVISIBLE);
@@ -259,6 +264,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
                 nonhide(slidingView,1);
                 bindList(1,0);
+
             }
         });
         searchBar_end.setOnKeyListener(new View.OnKeyListener(){
@@ -373,6 +379,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
             public void onItemClick(AdapterView<?> a_parent, View a_view, int position, long a_id) {
                 searchBar.setText(al.get(position).name);
                 listviewsearchedlist.add(0,al.get(position).name);
+                Adapter.notifyDataSetChanged();
                 startLatitude = al.get(position).x;
                 startLongitude = al.get(position).y;
                 Toast.makeText(MainActivity.this, (al.get(position).name)+ " 선택하였습니다.", Toast.LENGTH_SHORT).show();
@@ -389,7 +396,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
             public void onItemClick(AdapterView<?> a_parent, View a_view, int position, long a_id) {
                 searchBar_end.setText(al.get(position).name);
                 listviewsearchedlist.add(0,al.get(position).name);
-
+                Adapter.notifyDataSetChanged();
                 destLatitude = al.get(position).x;
                 destLongitude = al.get(position).y;
                 Toast.makeText(MainActivity.this, (al.get(position).name)+ " 선택하였습니다.", Toast.LENGTH_SHORT).show();
@@ -398,10 +405,9 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                 TMapMarkerItem markeritem = new TMapMarkerItem();
                 tMapView.addMarkerItem("select", markeritem);
                 confirmClick(listend);
-                listend.setVisibility(View.INVISIBLE);
                 slidingView.setPanelHeight(0);
                 searchedlist();
-
+                listend.setVisibility(View.GONE);
             }
         });
     }
@@ -422,6 +428,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
         if(listviewchecker)
             list.setVisibility(View.VISIBLE);
+
         else
             listend.setVisibility(View.VISIBLE);
 
@@ -458,7 +465,6 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
     }
 
     private void bindList(int delete,int index) {
-        System.out.println(delete+""+index);
         if(delete==1) {
             listviewlist.clear();
             listview_xy.clear();
@@ -468,7 +474,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         ListView listend = (ListView) findViewById(R.id.SearchListEndListView);
 
         if(index==1) {
-            listend.setVisibility(View.VISIBLE);
+            listend.setVisibility(View.GONE);
 
             Log.d("adapter확인","시작지");
             Adapter = new SimpleAdapter(this, listviewlist, android.R.layout.simple_list_item_2, new String[]{"item1", "item2"}, new int[]{android.R.id.text1, android.R.id.text2});
@@ -478,7 +484,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
             list.setVisibility(View.VISIBLE);
         }
         else{
-            list.setVisibility(View.VISIBLE);
+            list.setVisibility(View.GONE);
 
             Log.d("adapter확인","도착지");
             Adapter = new SimpleAdapter(this, listviewlist, android.R.layout.simple_list_item_2, new String[]{"item1", "item2"}, new int[]{android.R.id.text1, android.R.id.text2});
@@ -512,9 +518,9 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         ListView listend = (ListView)findViewById(R.id.SearchListEndListView);
 
         if(listviewchecker)
-            list.setVisibility(View.INVISIBLE);
+            listend.setVisibility(View.GONE);
         else
-            listend.setVisibility(View.INVISIBLE);
+            list.setVisibility(View.GONE);
 
         CurrentLocationBackground.setVisibility(View.VISIBLE);
         slidingView.setPanelHeight(340);
@@ -576,10 +582,11 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         listviewtmp = new ArrayList<>();
         listviewlist.clear();
         listview_xy.clear();
-        tmapdata.findAroundNamePOI(tpoint, keyword, new TMapData.FindAroundNamePOIListenerCallback()
+        al.clear();
+        tmapdata.findAllPOI( keyword, new TMapData.FindAllPOIListenerCallback()
         {
             @Override
-            public void onFindAroundNamePOI(final ArrayList<TMapPOIItem> poiItem) {
+            public void onFindAllPOI(final ArrayList<TMapPOIItem> poiItem) {
                 if (poiItem == null) return;
                 tMapView.removeAllMarkerItem();
                 for(int i = 0; i < poiItem.size(); i++) {
@@ -590,7 +597,6 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                         if(!listviewtmp.contains(item.getPOIName().toString())) {
                             HashMap<String,String> itemlist = new HashMap<String, String>();
                             HashMap<String,Double> xylist = new HashMap<String, Double>();
-                            System.out.println(item.name);
                             listviewtmp.add(item.getPOIName().toString());
                             itemlist.put("item1", item.getPOIName().toString());
                             itemlist.put("item2", String.valueOf(Math.round(item.getDistance(tpoint)))+"m");
@@ -602,13 +608,17 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                             xylist.put(item.getPOIName().toString()+"y",item.getPOIPoint().getLongitude());
 
                             listview_xy.add(xylist);
-                            listviewlist.add(itemlist);
+                            //listviewlist.add(itemlist);
 
                         }
                     }
+
                     if(!al.isEmpty())
                         Collections.sort(al);
-                    if(!listviewlist.isEmpty())
+
+
+
+                   /* if(!listviewlist.isEmpty())
                     Collections.sort(listviewlist, new Comparator<HashMap<String, String>>() {
                         @Override
                         public int compare(HashMap<String, String> o1, HashMap<String, String> o2) {
@@ -621,11 +631,21 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                                 return name1.compareTo(name2);
                             }
                         }
-                    });
+                    });*/
 
-                    Log.d("POI Name: ", item.getPOIName().toString() + ", " +
-                            "Address: " + item.getPOIAddress().replace("null", "")  + ", " +
-                            "Point: " + item.getPOIPoint().toString());
+                    /*for(int z=0; z<listviewlist.size();z++){
+                        System.out.println("C"+listviewlist.get(z));
+                    }*/
+
+                }
+                listviewlist.clear();
+                for(int z=0; z<al.size();z++){
+                    String name = al.get(z).name;
+                    double distance = Math.round(al.get(z).distance);
+                    HashMap<String,String> a = new HashMap<String, String>();
+                    a.put("item1",name);
+                    a.put("item2",String.valueOf(distance));
+                    listviewlist.add(a);
                 }
 
             }

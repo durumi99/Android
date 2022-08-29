@@ -500,7 +500,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
-            android:visibility="invisible"
+            android:visibility="gone"
             android:background="@color/white"
             />
         <ListView
@@ -508,7 +508,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
-            android:visibility="invisible"
+            android:visibility="gone"
             android:background="@color/white"
             />
     </LinearLayout>
