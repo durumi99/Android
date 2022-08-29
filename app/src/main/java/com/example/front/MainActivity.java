@@ -42,9 +42,12 @@ import com.skt.Tmap.TMapView;
 import com.skt.Tmap.poi_item.TMapPOIItem;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
+import org.w3c.dom.Document;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 
 class pair implements Comparable<pair>{
@@ -754,10 +757,11 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                     public void run() {
                         path.setLineWidth(10);
                         path.setLineColor(Color.rgb(7,125,238));
+                        // 경로 길이
                         TextView routeLength = (TextView) findViewById(R.id.route_length);
                         int routeLen = (int) path.getDistance();
                         routeLength.setText(Integer.toString(routeLen)+"m");
-
+                        getTimeTaken(path.getDistance());
                         tMapView.addTMapPath(path);
                         Bitmap start = BitmapFactory.decodeResource(getResources(),R.drawable.ic_current);
                         Bitmap end = BitmapFactory.decodeResource(getResources(),R.drawable.ic_icon);
@@ -766,6 +770,12 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                 });
             }
         });
+    }
+    public void getTimeTaken(Double routeLen){
+        TextView timeTaken = (TextView) findViewById(R.id.time_taken);
+        Double timeT = routeLen / 50;
+        int timeTT = (int) Math.ceil(timeT);
+        timeTaken.setText(Integer.toString(timeTT)+"분");
     }
     public void switchClick(View view){
         TextView searchBar_start = (TextView) findViewById(R.id.searchBar_start2);
