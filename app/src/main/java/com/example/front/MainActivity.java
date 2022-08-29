@@ -769,6 +769,17 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         String tmp = searchBar_start.getText().toString();
         searchBar_start.setText(searchBar_end.getText().toString());
         searchBar_end.setText(tmp);
+        TMapData tmapdata = new TMapData();
+
+        double temp = startLatitude;
+        startLatitude = destLatitude;
+        destLatitude = temp;
+
+        temp = startLongitude;
+        startLongitude = destLongitude;
+        destLongitude = temp;
+
+        drawRoute();
     }
 
     public void ChargingClick(View view){
