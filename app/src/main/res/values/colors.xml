@@ -12,4 +12,6 @@
     <color name="deepgray">#8A8A8F</color>
     <color name="transparent">#00000000</color>
     <color name="red">#FFFF0000</color>
+    <color name="routecolor">#FF077DEE</color>
+
 </resources>

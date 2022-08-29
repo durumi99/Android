@@ -287,6 +287,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                 listviewchecker=false;
                 editState = false;
                 nonhide(slidingView,2);
+                tMapView.removeTMapPath();
             }
         });
 
@@ -724,6 +725,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
         searchbarLayout.setVisibility(View.VISIBLE);
 
+        tMapView.removeMarkerItem("marker");
 
         ConstraintLayout navigation = (ConstraintLayout) findViewById(R.id.Navigation);
         navigation.setVisibility(View.VISIBLE);
@@ -742,25 +744,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         TMapData tmapdata = new TMapData();
         TMapPoint startpoint = new TMapPoint(startLatitude, startLongitude);
         TMapPoint destpoint = new TMapPoint(destLatitude, destLongitude);
-//        TMapMarkerItem startItem = new TMapMarkerItem();
-//        TMapMarkerItem destItem = new TMapMarkerItem();
-//
-//        startItem.setTMapPoint(startpoint);
-//        destItem.setTMapPoint(destpoint);
-//        startItem.setName("출발지");
-//        destItem.setName("목적지");
-//        startItem.setVisible(TMapMarkerItem.VISIBLE);
-//        destItem.setVisible(TMapMarkerItem.VISIBLE);
-//        Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.ic_current);
-//        startItem.setIcon(bitmap);
-//        bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.ic_icon);
-//        destItem.setIcon(bitmap);
-//        tMapView.addMarkerItem("출발지", startItem);
-//        tMapView.addMarkerItem("목적지",destItem);
 
-//        Bitmap start = BitmapFactory.decodeResource(getResources(),R.drawable.ic_current);
-//        Bitmap end = BitmapFactory.decodeResource(getResources(),R.drawable.ic_icon);
-//        tMapView.setTMapPathIcon(start, end);
 
         tmapdata.findPathDataWithType(TMapData.TMapPathType.PEDESTRIAN_PATH,startpoint,destpoint, new TMapData.FindPathDataListenerCallback() {
             @Override
@@ -768,8 +752,8 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        path.setLineWidth(20);
-                        path.setLineColor(Color.BLUE);
+                        path.setLineWidth(10);
+                        path.setLineColor(Color.rgb(7,125,238));
                         tMapView.addTMapPath(path);
                         Bitmap start = BitmapFactory.decodeResource(getResources(),R.drawable.ic_current);
                         Bitmap end = BitmapFactory.decodeResource(getResources(),R.drawable.ic_icon);
@@ -834,6 +818,8 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         EditText searchBar_start = (EditText) findViewById(R.id.searchBar_start);
         TextView searchBar_start2 = (TextView) findViewById(R.id.searchBar_start2);
         TMapData tmapdata = new TMapData();
+        startLatitude = tpoint.getLatitude();
+        startLongitude = tpoint.getLongitude();
         tmapdata.convertGpsToAddress(tpoint.getLatitude(), tpoint.getLongitude(),
                 new TMapData.ConvertGPSToAddressListenerCallback() {
                     @Override
