@@ -754,6 +754,10 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                     public void run() {
                         path.setLineWidth(10);
                         path.setLineColor(Color.rgb(7,125,238));
+                        TextView routeLength = (TextView) findViewById(R.id.route_length);
+                        int routeLen = (int) path.getDistance();
+                        routeLength.setText(Integer.toString(routeLen)+"m");
+
                         tMapView.addTMapPath(path);
                         Bitmap start = BitmapFactory.decodeResource(getResources(),R.drawable.ic_current);
                         Bitmap end = BitmapFactory.decodeResource(getResources(),R.drawable.ic_icon);
