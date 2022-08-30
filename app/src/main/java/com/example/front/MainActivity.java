@@ -42,13 +42,21 @@ import com.skt.Tmap.TMapView;
 import com.skt.Tmap.poi_item.TMapPOIItem;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
+import org.json.JSONObject;
 import org.w3c.dom.Document;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 class pair implements Comparable<pair>{
     double x;
@@ -156,6 +164,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         //리스트뷰객체
         ListView list = (ListView)findViewById(R.id.SearchListListView);
         ListView listend = (ListView)findViewById(R.id.SearchListEndListView);
+        ListView charge = (ListView)findViewById(R.id.charging);
 
         //현위치로 돌아오는 버튼 객체 생성 & 클릭 이벤트
         ImageButton CurrentLocation = (ImageButton)findViewById(R.id.CurrentLocate);
@@ -171,7 +180,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
             }
         });
 
-        //여기 밑으로 시작경로랑 도착경로 searchbar 두개인데 코드 복붙이라 간결하게해야함..
+
 
         //출발지 선택시 searchbar 나타내며 수행할 것
         EditText start_edit = (EditText) findViewById(R.id.edit_start);
@@ -297,6 +306,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                 editState = false;
                 nonhide(slidingView,2);
                 tMapView.removeTMapPath();
+                charge.setVisibility(View.GONE );
             }
         });
 
@@ -310,8 +320,10 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                 listviewchecker=false;
                 nonhide(slidingView,1);
                 bindList(1,0);
+                charge.setVisibility(View.GONE );
             }
         });
+
         //지도 눌렀을때 주소 읽어옴
         tMapView.setOnLongClickListenerCallback(new TMapView.OnLongClickListenerCallback() {
 
@@ -410,7 +422,108 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                 listend.setVisibility(View.GONE);
             }
         });
+
+        charge.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> a_parent, View a_view, int position, long a_id) {
+
+                chargingspace cs = new chargingspace();
+                searchBar_end.setText(cs.chargelist.get(position).fcltyNm);
+
+                Adapter.notifyDataSetChanged();
+                System.out.println(cs.chargelist.get(position).longitude);
+
+                destLatitude = (Double.parseDouble(cs.chargelist.get(position).latitude));
+                destLongitude = Double.parseDouble(cs.chargelist.get(position).longitude);
+                Toast.makeText(MainActivity.this, (cs.chargelist.get(position).fcltyNm)+ " 선택하였습니다.", Toast.LENGTH_SHORT).show();
+                tMapView.removeAllMarkerItem();
+                addMarker(startLatitude,startLongitude,cs.chargelist.get(position).fcltyNm);
+                TMapMarkerItem markeritem = new TMapMarkerItem();
+                tMapView.addMarkerItem("select", markeritem);
+                confirmClick(charge);
+                slidingView.setPanelHeight(0);
+                searchedlist();
+                charge.setVisibility(View.GONE);
+            }
+        });
     }
+
+    public static void httpGetConnection(String UrlData, String ParamData) {
+
+        //http 요청 시 url 주소와 파라미터 데이터를 결합하기 위한 변수 선언
+        String totalUrl = "";
+        if(ParamData != null && ParamData.length() > 0 &&
+                !ParamData.equals("") && !ParamData.contains("null")) { //파라미터 값이 널값이 아닌지 확인
+                totalUrl = UrlData.trim().toString() + "?" + ParamData.trim().toString();
+        }
+        else {
+            totalUrl = UrlData.trim().toString();
+        }
+
+        //http 통신을 하기위한 객체 선언 실시
+        URL url = null;
+        HttpURLConnection conn = null;
+
+        //http 통신 요청 후 응답 받은 데이터를 담기 위한 변수
+        String responseData = "";
+        BufferedReader br = null;
+        StringBuffer sb = null;
+
+        //메소드 호출 결과값을 반환하기 위한 변수
+        String returnData = "";
+
+        try {
+            //파라미터로 들어온 url을 사용해 connection 실시
+            url = new URL(totalUrl);
+            conn = (HttpURLConnection) url.openConnection();
+
+            //http 요청에 필요한 타입 정의 실시
+            conn.setRequestProperty("Accept", "application/json");
+            conn.setRequestMethod("GET");
+
+            System.out.println("호출1");
+            //http 요청 실시
+            conn.connect();
+            System.out.println("호출2");
+            System.out.println("http 요청 방식 : "+"GET");
+            System.out.println("http 요청 타입 : "+"application/json");
+            System.out.println("http 요청 주소 : "+UrlData);
+            System.out.println("http 요청 데이터 : "+ParamData);
+            System.out.println("");
+
+            //http 요청 후 응답 받은 데이터를 버퍼에 쌓는다
+            br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+            sb = new StringBuffer();
+            while ((responseData = br.readLine()) != null) {
+                sb.append(responseData); //StringBuffer에 응답받은 데이터 순차적으로 저장 실시
+            }
+
+            //메소드 호출 완료 시 반환하는 변수에 버퍼 데이터 삽입 실시
+            returnData = sb.toString();
+
+            //http 요청 응답 코드 확인 실시
+            String responseCode = String.valueOf(conn.getResponseCode());
+            System.out.println("http 응답 코드 : "+responseCode);
+            System.out.println("http 응답 데이터 : "+returnData);
+
+            chargingspace cs = new chargingspace();
+            cs.jsonParsing(returnData);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            //http 요청 및 응답 완료 후 BufferedReader를 닫아줍니다
+            try {
+                if (br != null) {
+                    br.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
 
     private void hide(SlidingUpPanelLayout slidingView,int check){ // 0 : start, 1 : end ,2 : map button
         LinearLayout dragview1 = (LinearLayout)findViewById(R.id.dragview1);
@@ -472,10 +585,10 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         }
         ListView list = (ListView) findViewById(R.id.SearchListListView);
         ListView listend = (ListView) findViewById(R.id.SearchListEndListView);
-
+        ListView charge = (ListView) findViewById(R.id.charging);
         if(index==1) {
             listend.setVisibility(View.GONE);
-
+            charge.setVisibility(View.GONE);
             Log.d("adapter확인","시작지");
             Adapter = new SimpleAdapter(this, listviewlist, android.R.layout.simple_list_item_2, new String[]{"item1", "item2"}, new int[]{android.R.id.text1, android.R.id.text2});
             Adapter.notifyDataSetChanged();
@@ -483,9 +596,21 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
             list.setAdapter(Adapter);
             list.setVisibility(View.VISIBLE);
         }
+        else if(index==9){
+            System.out.println("11111");
+
+            listend.setVisibility(View.GONE);
+            list.setVisibility(View.GONE);
+            chargingspace cs = new chargingspace();
+            Adapter = new SimpleAdapter(this, cs.chargelistview, android.R.layout.simple_list_item_2, new String[]{"item1", "item2"}, new int[]{android.R.id.text1, android.R.id.text2});
+            Adapter.notifyDataSetChanged();
+            charge.bringToFront();
+            charge.setAdapter(Adapter);
+            charge.setVisibility(View.VISIBLE);
+        }
         else{
             list.setVisibility(View.GONE);
-
+            charge.setVisibility(View.GONE);
             Log.d("adapter확인","도착지");
             Adapter = new SimpleAdapter(this, listviewlist, android.R.layout.simple_list_item_2, new String[]{"item1", "item2"}, new int[]{android.R.id.text1, android.R.id.text2});
             Adapter.notifyDataSetChanged();
@@ -516,7 +641,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         ImageView CurrentLocationBackground = (ImageView)findViewById(R.id.CurrentLocateBackground);
         ListView list = (ListView)findViewById(R.id.SearchListListView);
         ListView listend = (ListView)findViewById(R.id.SearchListEndListView);
-
+        EditText et = (EditText) findViewById(R.id.searchbarLayout_charge_edit);
         if(listviewchecker)
             listend.setVisibility(View.GONE);
         else
@@ -557,10 +682,12 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
             FrameLayout searchbarLayout = (FrameLayout) findViewById(R.id.searchbarLayout);
             searchbarLayout.setVisibility(View.GONE);
+            et.setVisibility(View.GONE);
 
             dragview1.setVisibility(View.VISIBLE);
             dragview2.setVisibility(View.VISIBLE);
             HistoryListView.setVisibility(View.VISIBLE);
+
         }
         //확인 버튼
         Button confirmButton = (Button)findViewById(R.id.confirm_button);
@@ -644,7 +771,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                     double distance = Math.round(al.get(z).distance);
                     HashMap<String,String> a = new HashMap<String, String>();
                     a.put("item1",name);
-                    a.put("item2",String.valueOf(distance));
+                    a.put("item2",String.valueOf(distance)+"m");
                     listviewlist.add(a);
                 }
 
@@ -677,17 +804,36 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
         tMapView.addMarkerItem(poi.getPOIID(),item);
     }
-    private void addMarker(double lat, double lng, String title) {
+
+    public void addMarker(double lat, double lng, String title) {
         TMapMarkerItem item = new TMapMarkerItem();
         TMapPoint point = new TMapPoint(lat, lng);
         item.setTMapPoint(point);
+
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_icon);//비트맵을 marker 아이콘 설정
         item.setIcon(bitmap);
         item.setPosition(0.5f, 1);
         item.setCalloutTitle(title);
         item.setCalloutSubTitle("sub " + title);
         item.setCanShowCallout(true);
-        tMapView.addMarkerItem("m" + 1, item);
+        tMapView.addMarkerItem("m", item);
+    }
+    public void addMarker(List<chargingspace> a,int i) {
+        TMapMarkerItem item = new TMapMarkerItem();
+        TMapPoint point = new TMapPoint( Double.parseDouble(a.get(i).latitude), Double.parseDouble(a.get(i).longitude));
+        item.setTMapPoint(point);
+
+
+        item.setVisible(TMapMarkerItem.VISIBLE);
+
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_icon);//비트맵을 marker 아이콘 설정
+        item.setIcon(bitmap);
+        item.setPosition(0.5f, 1);
+        item.setCalloutTitle(a.get(i).fcltyNm);
+        item.setCanShowCallout(true);
+
+        tMapView.addMarkerItem(a.get(i).fcltyNm,item);
+
 
     }
     public void popClick(View view){
@@ -816,23 +962,27 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         drawRoute();
     }
 
-    public void ChargingClick(View view){
+    public void ChargingClick(View view) {
         SlidingUpPanelLayout slidingView = (SlidingUpPanelLayout) findViewById(R.id.slidingView);
 
-        LinearLayout dragview1 = (LinearLayout)findViewById(R.id.dragview1);
-        LinearLayout dragview2 = (LinearLayout)findViewById(R.id.dragview2);
-        ListView HistoryListView = (ListView)findViewById(R.id.HistoryListView);
+        LinearLayout dragview1 = (LinearLayout) findViewById(R.id.dragview1);
+        LinearLayout dragview2 = (LinearLayout) findViewById(R.id.dragview2);
+        ListView HistoryListView = (ListView) findViewById(R.id.HistoryListView);
         slidingView.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-        Log.d("sliding view : ",String.valueOf(slidingView.getPanelState()));
-        ImageButton CurrentLocation = (ImageButton)findViewById(R.id.CurrentLocate);
-        ImageButton optionButton = (ImageButton)findViewById(R.id.optionButton);
+        Log.d("sliding view : ", String.valueOf(slidingView.getPanelState()));
+        ImageButton CurrentLocation = (ImageButton) findViewById(R.id.CurrentLocate);
+        ImageButton optionButton = (ImageButton) findViewById(R.id.optionButton);
         FrameLayout searchbarLayout_charge = (FrameLayout) findViewById(R.id.searchbarLayout_charge);
-        ImageView CurrentLocationBackground = (ImageView)findViewById(R.id.CurrentLocateBackground);
-        ListView list = (ListView)findViewById(R.id.SearchListListView);
-        ListView listend = (ListView)findViewById(R.id.SearchListEndListView);
+        ImageView CurrentLocationBackground = (ImageView) findViewById(R.id.CurrentLocateBackground);
+        ListView list = (ListView) findViewById(R.id.SearchListListView);
+        ListView listend = (ListView) findViewById(R.id.SearchListEndListView);
+        ListView charge = (ListView) findViewById(R.id.charging);
+        EditText et = (EditText) findViewById(R.id.searchbarLayout_charge_edit);
 
         list.setVisibility(View.INVISIBLE);
         listend.setVisibility(View.INVISIBLE);
+        charge.setVisibility(View.VISIBLE);
+        charge.bringToFront();
 
         CurrentLocationBackground.setVisibility(View.GONE);
 
@@ -841,10 +991,48 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
         searchbarLayout_charge.bringToFront();
         searchbarLayout_charge.setVisibility(View.VISIBLE);
-
+        et.setVisibility(View.VISIBLE);
         dragview1.setVisibility(View.GONE);
         dragview2.setVisibility(View.GONE);
         HistoryListView.setVisibility(View.GONE);
+
+        Thread work = new Thread(){
+        public void run()
+            {
+                try{
+                String url = "http://18.207.245.34:3000/users/electric";
+
+            TMapPoint tpoint = tMapView.getLocationPoint();
+            latitude = tpoint.getLatitude();
+            longitude = tpoint.getLongitude();
+                /*latitude = 37.497195;
+                longitude = 127.027926;*/
+                String data = "lon=" + longitude + "&" + "lat=" + latitude;
+                System.out.println("호출");
+                //메소드 호출 실시
+                httpGetConnection(url, data);
+                System.out.println("호출성공");
+                Thread.sleep(1);
+            }
+                catch(InterruptedException a){
+                }
+            }
+        };
+
+        work.start();
+        try{
+            work.join();
+        }
+        catch(InterruptedException e){
+            e.printStackTrace();
+        }
+        bindList(0, 9);
+        chargingspace cs = new chargingspace();
+        for(int i=0; i<cs.chargelist.size(); i++) {
+            addMarker(cs.chargelist,i);
+            System.out.println(Double.parseDouble(cs.chargelist.get(i).latitude)+" "+Double.parseDouble(cs.chargelist.get(i).longitude)+" "+cs.chargelist.get(i).fcltyNm);
+        }
+
 
     }
 
