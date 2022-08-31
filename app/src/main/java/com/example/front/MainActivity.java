@@ -156,6 +156,8 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
         // 옵션메뉴
         ImageButton optionButton = (ImageButton)findViewById(R.id.optionButton);
+        ImageView optionButtonBackground = (ImageView)findViewById(R.id.OptionButtonBackground);
+        optionButtonBackground.bringToFront();
         optionButton.bringToFront();
 
         //searchBar 객체 생성 & 최상단으로 가져오기
@@ -561,6 +563,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         FrameLayout searchbarLayoutStart = (FrameLayout) findViewById(R.id.searchbarLayout_start);
         FrameLayout searchbarLayoutEnd = (FrameLayout) findViewById(R.id.searchbarLayout_end);
         ImageView CurrentLocationBackground = (ImageView)findViewById(R.id.CurrentLocateBackground);
+        ImageView OptionButtonBackground = (ImageView)findViewById(R.id.OptionButtonBackground);
         ListView list = (ListView)findViewById(R.id.SearchListListView);
         ListView listend = (ListView)findViewById(R.id.SearchListEndListView);
 
@@ -571,7 +574,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
             listend.setVisibility(View.VISIBLE);
 
         CurrentLocationBackground.setVisibility(View.GONE);
-
+        OptionButtonBackground.setVisibility(View.GONE);
         CurrentLocation.setVisibility(View.GONE);
         optionButton.setVisibility(View.GONE);
 
@@ -664,6 +667,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         FrameLayout searchbarLayoutStart = (FrameLayout) findViewById(R.id.searchbarLayout_start);
         FrameLayout searchbarLayoutEnd = (FrameLayout) findViewById(R.id.searchbarLayout_end);
         ImageView CurrentLocationBackground = (ImageView)findViewById(R.id.CurrentLocateBackground);
+        ImageView OptionButtonBackground = (ImageView)findViewById(R.id.OptionButtonBackground);
         ListView list = (ListView)findViewById(R.id.SearchListListView);
         ListView listend = (ListView)findViewById(R.id.SearchListEndListView);
         EditText et = (EditText) findViewById(R.id.searchbarLayout_charge_edit);
@@ -673,6 +677,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
             list.setVisibility(View.GONE);
 
         CurrentLocationBackground.setVisibility(View.VISIBLE);
+        OptionButtonBackground.setVisibility(View.VISIBLE);
         slidingView.setPanelHeight(340);
         CurrentLocation.setVisibility(View.VISIBLE);
         optionButton.setVisibility(View.VISIBLE);
@@ -1120,6 +1125,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         ImageButton optionButton = (ImageButton) findViewById(R.id.optionButton);
         FrameLayout searchbarLayout_charge = (FrameLayout) findViewById(R.id.searchbarLayout_charge);
         ImageView CurrentLocationBackground = (ImageView) findViewById(R.id.CurrentLocateBackground);
+        ImageView OptionButtonBackground = (ImageView)findViewById(R.id.OptionButtonBackground);
         ListView list = (ListView) findViewById(R.id.SearchListListView);
         ListView listend = (ListView) findViewById(R.id.SearchListEndListView);
         ListView charge = (ListView) findViewById(R.id.charging);
@@ -1131,7 +1137,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         charge.bringToFront();
 
         CurrentLocationBackground.setVisibility(View.GONE);
-
+        OptionButtonBackground.setVisibility(View.GONE);
         CurrentLocation.setVisibility(View.GONE);
         optionButton.setVisibility(View.GONE);
 

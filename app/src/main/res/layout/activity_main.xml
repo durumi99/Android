@@ -36,7 +36,7 @@
                     android:id="@+id/optionButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
+                    android:layout_margin="15dp"
                     android:background="@color/transparent"
                     android:onClick="popClick"
                     android:padding="10dp"
@@ -207,23 +207,6 @@
                     android:layout_marginBottom="75dp"
                     android:src="@drawable/ic_gps"></ImageButton>
 
-
-
-
-                <!--                &lt;!&ndash;확인버튼                     &ndash;&gt;-->
-
-                <!--                <Button-->
-                <!--                    android:id="@+id/confirm_button"-->
-                <!--                    android:layout_width="match_parent"-->
-                <!--                    android:layout_height="100dp"-->
-                <!--                    android:layout_alignParentBottom="true"-->
-                <!--                    android:layout_marginBottom="-10dp"-->
-                <!--                    android:text="확인"-->
-                <!--                    android:textSize="20dp"-->
-                <!--                    android:textStyle="bold"-->
-                <!--                    android:visibility="invisible"-->
-                <!--                    android:onClick="confirmClick">-->
-                <!--                </Button>-->
                 <Button
                     android:id="@+id/confirm_button"
                     android:layout_width="match_parent"
@@ -314,7 +297,13 @@
                     android:layout_marginRight="30dp"
                     android:layout_marginBottom="45dp"
                     app:srcCompat="@drawable/ic_circle" />
-
+                <ImageView
+                    android:id="@+id/OptionButtonBackground"
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    app:srcCompat="@drawable/ic_circle" />
             </RelativeLayout>
         </RelativeLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
