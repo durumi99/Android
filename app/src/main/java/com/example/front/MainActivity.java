@@ -313,6 +313,8 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                 nonhide(slidingView,2);
                 tMapView.removeTMapPath();
                 charge.setVisibility(View.GONE );
+                tMapView.removeTMapPolyLine("경로");
+                tMapView.removeAllMarkerItem();
             }
         });
 
@@ -454,13 +456,13 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         });
     }
 
-    public static void httpGetConnection(String UrlData, String ParamData) {
+    public static void httpGetConnection(String UrlData, String ParamData, int index) {
 
         //http 요청 시 url 주소와 파라미터 데이터를 결합하기 위한 변수 선언
         String totalUrl = "";
         if(ParamData != null && ParamData.length() > 0 &&
                 !ParamData.equals("") && !ParamData.contains("null")) { //파라미터 값이 널값이 아닌지 확인
-                totalUrl = UrlData.trim().toString() + "?" + ParamData.trim().toString();
+            totalUrl = UrlData.trim().toString() + "?" + ParamData.trim().toString();
         }
         else {
             totalUrl = UrlData.trim().toString();
@@ -512,8 +514,14 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
             System.out.println("http 응답 코드 : "+responseCode);
             System.out.println("http 응답 데이터 : "+returnData);
 
-            chargingspace cs = new chargingspace();
-            cs.jsonParsing(returnData);
+            if(index==1) {
+                chargingspace cs = new chargingspace();
+                cs.jsonParsing(returnData);
+            }
+            else if(index==2){
+                PoiSearch PS = new PoiSearch();
+                PS.jsonParsing(returnData);
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -528,6 +536,8 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
             }
         }
     }
+
+
 
     private void hide(SlidingUpPanelLayout slidingView,int check){ // 0 : start, 1 : end ,2 : map button
         LinearLayout dragview1 = (LinearLayout)findViewById(R.id.dragview1);
@@ -697,7 +707,6 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         Button confirmButton = (Button)findViewById(R.id.confirm_button);
         confirmButton.setVisibility(View.GONE);
     }
-
     private void search(int index){
         TMapPoint tpoint = tMapView.getLocationPoint();
         latitude = tpoint.getLatitude();
@@ -964,8 +973,80 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         TMapPoint startpoint = new TMapPoint(startLatitude, startLongitude);
         TMapPoint destpoint = new TMapPoint(destLatitude, destLongitude);
 
+        Thread work = new Thread(){
+            public void run()
+            {
+                try{
+                    System.out.println("호출시작");
+                    String url = "http://18.207.245.34:3000/users/poisearch";
 
-        tmapdata.findPathDataWithType(TMapData.TMapPathType.PEDESTRIAN_PATH,startpoint,destpoint, new TMapData.FindPathDataListenerCallback() {
+                    TMapPoint tpoint = tMapView.getLocationPoint();
+                    latitude = tpoint.getLatitude();
+                    longitude = tpoint.getLongitude();
+                /*latitude = 37.497195;
+                longitude = 127.027926;*/
+                    String data = "fromLon=" + startLongitude + "&" + "toLon=" + destLongitude+ "&" + "fromLat=" + startLatitude+ "&" + "toLat=" + destLatitude+ "&" + "startName=" +"시작"+ "&"+"endName="+"종료";
+                    System.out.println(data);
+                    //메소드 호출 실시
+                    httpGetConnection(url, data,2);
+                    Thread.sleep(1);
+                }
+                catch(InterruptedException a){
+                }
+            }
+        };
+        work.start();
+        try{
+            work.join();
+        }
+        catch(InterruptedException e){
+            e.printStackTrace();
+        }
+
+        ArrayList<TMapPoint> alTMapPoint = new ArrayList<TMapPoint>();
+
+        PoiSearch ps = new PoiSearch();
+        for(int i=0; i<ps.poisearchlist.size(); i++){
+            System.out.println(i);
+            alTMapPoint.add( new TMapPoint(Double.parseDouble(ps.poisearchlist.get(i).longitude), Double.parseDouble(ps.poisearchlist.get(i).latitude) ));
+            System.out.println("-------"+ps.poisearchlist.get(i).longitude+" "+ps.poisearchlist.get(i).latitude);
+        }
+        TMapPolyLine tMapPolyLine = new TMapPolyLine();
+        tMapPolyLine.setLineColor(Color.BLUE);
+        tMapPolyLine.setLineWidth(2);
+
+        Bitmap start = BitmapFactory.decodeResource(getResources(),R.drawable.ic_current);
+        Bitmap end = BitmapFactory.decodeResource(getResources(),R.drawable.ic_icon);
+        tMapView.setTMapPathIcon(start, end);
+
+        TMapPoint start1 = new TMapPoint(startLatitude, startLongitude);
+        TMapMarkerItem start2 = new TMapMarkerItem();
+        start2.setIcon(start); // 마커 아이콘 지정
+        start2.setPosition(0.5f, 1.0f); // 마커의 중심점을 중앙, 하단으로 설정
+        start2.setTMapPoint( start1 ); // 마커의 좌표 지정
+        start2.setName("시작지"); // 마커의 타이틀 지정
+        tMapView.addMarkerItem("markerItem1", start2); // 지도에 마커 추가
+
+        TMapPoint end1 = new TMapPoint(destLatitude, destLongitude);
+        TMapMarkerItem end2 = new TMapMarkerItem();
+        end2.setIcon(end); // 마커 아이콘 지정
+        end2.setPosition(0.5f, 1.0f); // 마커의 중심점을 중앙, 하단으로 설정
+        end2.setTMapPoint( end1 ); // 마커의 좌표 지정
+        end2.setName("도착지"); // 마커의 타이틀 지정
+        tMapView.addMarkerItem("markerItem2", end2); // 지도에 마커 추가
+
+        for( int i=0; i<alTMapPoint.size(); i++ ) {
+            tMapPolyLine.addLinePoint( alTMapPoint.get(i) );
+        }
+        tMapView.addTMapPolyLine("경로", tMapPolyLine);
+
+        TextView timeTaken = (TextView) findViewById(R.id.time_taken);
+        timeTaken.setText(String.valueOf(Math.round((ps.totalTime/60)*100)/100.0)+"분");
+
+        TextView routeLength = (TextView) findViewById(R.id.route_length);
+        routeLength.setText(String.valueOf(ps.totalDistance)+"m");
+
+       /* tmapdata.findPathDataWithType(TMapData.TMapPathType.PEDESTRIAN_PATH,startpoint,destpoint, new TMapData.FindPathDataListenerCallback() {
             @Override
             public void onFindPathData(final TMapPolyLine path) {
                 runOnUiThread(new Runnable() {
@@ -985,7 +1066,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                     }
                 });
             }
-        });
+        });*/
     }
     public void getTimeTaken(Double routeLen){
         TextView timeTaken = (TextView) findViewById(R.id.time_taken);
@@ -1061,7 +1142,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                 String data = "lon=" + longitude + "&" + "lat=" + latitude;
                 System.out.println("호출");
                 //메소드 호출 실시
-                httpGetConnection(url, data);
+                httpGetConnection(url, data,1);
                 System.out.println("호출성공");
                 Thread.sleep(1);
             }
