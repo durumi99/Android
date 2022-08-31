@@ -40,6 +40,7 @@ import com.skt.Tmap.TMapGpsManager;
 import com.skt.Tmap.TMapMarkerItem;
 import com.skt.Tmap.TMapPoint;
 import com.skt.Tmap.TMapPolyLine;
+import com.skt.Tmap.TMapPolygon;
 import com.skt.Tmap.TMapView;
 import com.skt.Tmap.poi_item.TMapPOIItem;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
@@ -1024,6 +1025,9 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         TMapPolyLine tMapPolyLine = new TMapPolyLine();
         tMapPolyLine.setLineColor(Color.BLUE);
         tMapPolyLine.setLineWidth(2);
+
+        TMapPolygon tpolygon = new TMapPolygon();
+       //tpolygon.setLineColor(getResources().getColorStateList(R.color.purple_500));
 
         Bitmap start = BitmapFactory.decodeResource(getResources(),R.drawable.ic_current);
         Bitmap end = BitmapFactory.decodeResource(getResources(),R.drawable.ic_icon);
