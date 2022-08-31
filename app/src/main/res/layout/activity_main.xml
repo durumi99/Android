@@ -327,73 +327,87 @@
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:orientation="vertical"
-            android:id="@+id/dragview1"
-            >
-            //horizontal linearlayout 뷰
+            android:id="@+id/dragview1">
+            //출발위치 이미지뷰
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="3">
-                //출발위치 이미지뷰
-
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_current"
-                        android:layout_weight="1"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginLeft="9dp"
                         ></ImageView>
 
-
-                //출발 위치 입력 폼
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp">
-                    <TextView
-                        android:background="@null"
+                    <ImageView
+                        android:layout_width="6dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/ic_dottedline"
+                        android:layout_marginLeft="17dp"
+                        ></ImageView>
+                    //도착위치 이미지뷰
+                    <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="0dp"
-                        android:layout_marginLeft="15dp"
-                        android:hint="출발지"
-                        android:textSize="10dp"
-                        />
+                        android:src="@drawable/ic_pin"
+                        android:layout_marginLeft="10dp"
+                        ></ImageView>
+                </LinearLayout>
+                //horizontal linearlayout 뷰
+                <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="3">
 
-                    <EditText
-                        android:background="@null"
-                        android:layout_width="300dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginLeft="15dp"
-                        android:hint="출발 위치"
-                        android:id="@+id/edit_start"
-                        />
-                    <View
-                        android:layout_width="300dp"
-                        android:layout_height="2dp"
-                        android:layout_alignBottom="@+id/edit_start"
-                        android:layout_marginLeft="15dp"
-                        android:background="#D3D3D3"/>
-                </RelativeLayout>
-            </LinearLayout>
-            //horizontal linearlayout 뷰
-            <LinearLayout
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp">
+                        <TextView
+                            android:background="@null"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="0dp"
+                            android:layout_marginLeft="15dp"
+                            android:hint="출발지"
+                            android:textSize="10dp"
+                            />
+
+                        <EditText
+                            android:background="@null"
+                            android:layout_width="300dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginLeft="15dp"
+                            android:hint="출발 위치"
+                            android:id="@+id/edit_start"
+                            />
+                        <View
+                            android:layout_width="300dp"
+                            android:layout_height="2dp"
+                            android:layout_alignBottom="@+id/edit_start"
+                            android:layout_marginLeft="15dp"
+                            android:background="#D3D3D3"/>
+                    </RelativeLayout>
+                </LinearLayout>
+                //horizontal linearlayout 뷰
+                <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:id="@+id/dragview2"
                 android:weightSum="2">
                 //도착위치 이미지뷰
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_pin"
-                    android:layout_weight="1"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginLeft="7dp"
-                    ></ImageView>
 
                 //도착 위치 입력 폼
                 <RelativeLayout
@@ -435,7 +449,8 @@
                         android:onClick="mapClick"
                         />
                 </RelativeLayout>
-
+            </LinearLayout>
+        </LinearLayout>
             </LinearLayout>
             //구분선
             <View
