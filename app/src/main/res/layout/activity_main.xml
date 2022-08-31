@@ -55,7 +55,7 @@
                         android:layout_width="300dp"
                         android:layout_height="50dp"
                         android:layout_alignParentTop="true"
-                        android:layout_marginLeft="50dp"
+                        android:layout_marginLeft="30dp"
                         android:layout_marginTop="10dp"
                         android:background="@drawable/border_searchbar"
                         android:hint="출발 위치 입력"
@@ -66,7 +66,7 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_alignParentTop="true"
-                        android:layout_marginLeft="60dp"
+                        android:layout_marginLeft="40dp"
                         android:layout_marginTop="25dp"
                         android:background="@drawable/ic_cancel"
                         android:backgroundTint="@color/black" />
@@ -86,7 +86,7 @@
                         android:layout_width="300dp"
                         android:layout_height="50dp"
                         android:layout_alignParentTop="true"
-                        android:layout_marginLeft="50dp"
+                        android:layout_marginLeft="30dp"
                         android:layout_marginTop="10dp"
                         android:background="@drawable/border_searchbar"
                         android:hint="도착 위치 입력"
@@ -97,7 +97,7 @@
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:layout_alignParentTop="true"
-                        android:layout_marginLeft="60dp"
+                        android:layout_marginLeft="40dp"
                         android:layout_marginTop="23dp"
                         android:background="@drawable/ic_cancel" />
 
@@ -116,7 +116,7 @@
                         android:layout_width="300dp"
                         android:layout_height="50dp"
                         android:layout_alignParentTop="true"
-                        android:layout_marginLeft="50dp"
+                        android:layout_marginLeft="30dp"
                         android:layout_marginTop="10dp"
                         android:background="@drawable/border_searchbar"
                         android:text="휠체어 충전"
@@ -127,7 +127,7 @@
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:layout_alignParentTop="true"
-                        android:layout_marginLeft="60dp"
+                        android:layout_marginLeft="40dp"
                         android:layout_marginTop="23dp"
                         android:background="@drawable/ic_cancel" />
 
@@ -414,7 +414,7 @@
                 //도착 위치 입력 폼
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dp">
+                    android:layout_height="49dp">
                     <TextView
                         android:background="@null"
                         android:layout_width="wrap_content"
@@ -438,13 +438,14 @@
                         android:layout_height="20dp"
                         android:background="@color/lightgray"
                         android:layout_marginTop="15dp"
-                        android:layout_marginLeft="320dp"/>
+                        android:layout_marginLeft="280dp"/>
+
                     <ImageButton
                         android:id="@+id/map_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:layout_marginLeft="340dp"
+                        android:layout_marginLeft="300dp"
                         android:src="@drawable/ic_map"
                         android:background="@null"
                         android:onClick="mapClick"
