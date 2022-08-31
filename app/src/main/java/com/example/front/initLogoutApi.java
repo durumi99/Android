@@ -8,8 +8,8 @@ import retrofit2.http.Body;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 // 로그인
-public interface initMyApi {
+public interface initLogoutApi {
     //@통신 방식("통신 API명")
-    @POST("/users/login")
-    Call<String> getLoginResponse(@Body LoginRequest loginRequest);
+    @POST("/users/logout")
+    Call<String> getLogoutResponse();
 }

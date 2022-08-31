@@ -1,5 +1,6 @@
 package com.example.front;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -58,6 +59,10 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 class pair implements Comparable<pair>{
     double x;
@@ -843,9 +848,12 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
         Intent temp = getIntent();
         boolean islogin = temp.getBooleanExtra("isLogin",false);
+        MenuItem item = popM.getMenu().findItem(R.id.menu2);
         if(islogin) {
-            MenuItem item = popM.getMenu().findItem(R.id.menu2);
             item.setTitle("로그아웃");
+        }
+        else{
+            item.setTitle("로그인");
         }
         popM.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
@@ -862,8 +870,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                             startActivity(intent);
                         }
                         else{ // 로그 아웃
-//                            item.setTitle("로그아웃");
-                            Log.d("logout","menu");
+                            logout();
                         }
                         return true;
                     case R.id.menu3:
@@ -876,6 +883,41 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
             }
         });
         popM.show();
+    }
+
+    private void logout() {
+
+        //retrofit 생성
+        RetrofitClient retrofitClient = RetrofitClient.getInstance();
+        initLogoutApi initLogoutApi = RetrofitClient.getLogoutInterface();
+        Call<String> call = initLogoutApi.getLogoutResponse();
+
+        call.enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(Call<String> call, Response<String> response) {
+                    Log.d("isSuccessful", String.valueOf(response.isSuccessful()));
+                    Log.d("body", String.valueOf(response.body()));
+                    Log.d("response", String.valueOf(response.code()));
+                    //통신 성공
+
+                    Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                    intent.putExtra("isLogin", false);
+                    startActivity(intent);
+                    MainActivity.this.finish();
+                }
+
+                @Override
+                public void onFailure(Call<String> call, Throwable t) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                    t.printStackTrace();
+                    builder.setTitle("알림")
+                            .setMessage("예기치 못한 오류가 발생하였습니다.\n 고객센터에 문의바랍니다.")
+                            .setPositiveButton("확인", null)
+                            .create()
+                            .show();
+                }
+            });
+
     }
 
     public void confirmClick(View view){
