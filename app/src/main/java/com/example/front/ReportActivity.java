@@ -5,10 +5,12 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.ImageDecoder;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -26,9 +28,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.FileProvider;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -43,7 +48,8 @@ public class ReportActivity  extends AppCompatActivity {
     Uri uri;
     Button btn_photo,btn_photo_gal;
     ImageView iv_photo;
-
+    File file;
+    Boolean isSuccess = false;
     final static int TAKE_PICTURE = 1;
 
     String mCurrentPhotoPath;
@@ -66,14 +72,15 @@ public class ReportActivity  extends AppCompatActivity {
                 ActivityCompat.requestPermissions(ReportActivity.this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
             }
         }
-
         btn_photo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.btn_photo:
-                        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(cameraIntent, TAKE_PICTURE);
+//                        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                        startActivityForResult(cameraIntent, TAKE_PICTURE);
+//                        Log.d("1",String.valueOf(cameraIntent.resolveActivity(getPackageManager())));
+                        dispatchTakePictureIntent();
                         break;
                 }
             }
@@ -96,9 +103,12 @@ public class ReportActivity  extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(checkInput() == false){
+                    Log.d("checkinput",String.valueOf(checkInput()));
                     return;
                 }
-                reportResponse();
+//                reportResponse();
+
+
                 removeWholeText();
                 Intent intent = new Intent(ReportActivity.this, PopupActivity.class);
                 startActivity(intent);
@@ -115,16 +125,11 @@ public class ReportActivity  extends AppCompatActivity {
         String title = titleText.getText().toString().trim();
         String content = contentText.getText().toString().trim();
         String address = addressText.getText().toString().trim();
-        String image = imgView.toString().trim();
 
-//        File file = new File(imgView);
-//        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-//        MultipartBody.Part body = MultipartBody.Part.createFormData("uploaded_file", file.getName(), requestFile);
-//        RequestBody descBody = RequestBody.create(MediaType.parse("text/plain"), idx);
-//
-
+        File filename = file;
+        Log.d("image",String.valueOf(filename));
         //loginRequest에 사용자가 입력한 email과 pw를 저장
-        ReportRequest reportRequest = new ReportRequest(title,content,address,image);
+        ReportRequest reportRequest = new ReportRequest(title,content,address,filename);
 
         //retrofit 생성
         RetrofitClient retrofitClient = RetrofitClient.getInstance();
@@ -139,7 +144,7 @@ public class ReportActivity  extends AppCompatActivity {
                 Log.d("response", String.valueOf(response.code()));
                 //통신 성공
                 if (response.isSuccessful() && response.body() != null) {
-                        ;
+                        isSuccess = true;
                 }
                 else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(ReportActivity.this);
@@ -204,6 +209,11 @@ public class ReportActivity  extends AppCompatActivity {
                 public void onActivityResult(ActivityResult result) {
                     if(result.getResultCode() == RESULT_OK && result.getData() != null){
                         uri = result.getData().getData();
+                        try {
+                            file = createImageFile();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                         Bitmap bitmap = null;
                         try {
                             bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),uri);
@@ -214,6 +224,7 @@ public class ReportActivity  extends AppCompatActivity {
                     }
                 }
             });
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -226,17 +237,67 @@ public class ReportActivity  extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-
-        switch (requestCode) {
-            case TAKE_PICTURE:
-                if (resultCode == RESULT_OK && intent.hasExtra("data")) {
-                    Bitmap bitmap = (Bitmap) intent.getExtras().get("data");
-                    if (bitmap != null) {
-                        iv_photo.setImageBitmap(bitmap);
+        try {
+            switch (requestCode) {
+                case REQUEST_TAKE_PHOTO: {
+                    if (resultCode == RESULT_OK) {
+                        file = new File(mCurrentPhotoPath);
+                        Bitmap bitmap;
+                        if (Build.VERSION.SDK_INT >= 29) {
+                            ImageDecoder.Source source = ImageDecoder.createSource(getContentResolver(), Uri.fromFile(file));
+                            try {
+                                bitmap = ImageDecoder.decodeBitmap(source);
+                                if (bitmap != null) { iv_photo.setImageBitmap(bitmap); }
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+                            try {
+                                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), Uri.fromFile(file));
+                                if (bitmap != null) { iv_photo.setImageBitmap(bitmap); }
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
                     }
-
+                    break;
                 }
-                break;
+            }
+        } catch (Exception error) {
+            error.printStackTrace();
+        }
+    }
+
+    private File createImageFile() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,
+                ".jpg",
+                storageDir
+        );
+
+        mCurrentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        Log.d("1",String.valueOf(takePictureIntent.resolveActivity(getPackageManager())));
+
+        if(takePictureIntent.resolveActivity(getPackageManager()) != null || true) {
+            File photoFile = null;
+
+            try { photoFile = createImageFile(); }
+            catch (IOException ex) { }
+
+            Log.d("photoFile",String.valueOf(photoFile));
+            if(photoFile != null) {
+                Log.d("photoFile",String.valueOf(photoFile));
+                Uri photoURI = FileProvider.getUriForFile(this, "com.example.front.fileprovider", photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+            }
         }
     }
 }

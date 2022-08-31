@@ -1,11 +1,13 @@
 package com.example.front;
 
+import java.io.File;
+
 public class ReportRequest {
 
     public String title;
     public String content;
     public String address;
-    public String image;
+    public File filename;
 
     public String getTitle() {
         return title;
@@ -16,8 +18,8 @@ public class ReportRequest {
     public String getAddresss() {
         return address;
     }
-    public String getImage() {
-        return image;
+    public File getFilename() {
+        return filename;
     }
 
 
@@ -31,15 +33,15 @@ public class ReportRequest {
     public void setAddress(String address) {
         this.address = address;
     }
-    public void setImage(String image) {
-        this.image = image;
+    public void setFilename(File filename) {
+        this.filename = filename;
     }
 
 
-    public ReportRequest(String title, String content,String address,String image) {
+    public ReportRequest(String title, String content,String address,File filename) {
         this.title = title;
         this.content = content;
         this.address = address;
-        this.image = image;
+        this.filename = filename;
     }
 }
