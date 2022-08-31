@@ -53,6 +53,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -203,7 +204,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                 list.setVisibility(View.VISIBLE);
                 list.bringToFront();
                 hide(slidingView,0);
-
+                slidingView.setPanelHeight(0);
                 listend.setVisibility(View.GONE);
 
                 return true;
@@ -236,6 +237,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                     case KeyEvent.KEYCODE_ENTER:
                         al.clear();
                         search(1);
+                        slidingView.setPanelHeight(300);
                         break;
                     case KeyEvent.KEYCODE_DEL:
                         list.setVisibility(View.INVISIBLE);
@@ -251,6 +253,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
             }
         });
 
+        LinearLayout dragView = (LinearLayout) findViewById(R.id.dragView);
 
         //도착지 선택시 searchbar 나타내며 수행할 것
         EditText edit_end = (EditText) findViewById(R.id.edit_end);
@@ -258,13 +261,19 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         edit_end.setOnTouchListener(new View.OnTouchListener(){
             @Override
             public boolean onTouch(View view , MotionEvent event){
+                System.out.println("여긴듯");
+                //slidingView.setPanelHeight(0);
                 editState = false;
                 isStart = false;
                 listviewchecker=false;
+
                 hide(slidingView,1);
-                listend.setVisibility(View.VISIBLE);
+                slidingView.setPanelHeight(0);
+
                 listend.bringToFront();
                 tMapView.removeAllMarkerItem();
+
+                System.out.println(dragView.getVisibility());
 
                 return true;
             }
@@ -289,6 +298,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                     case KeyEvent.KEYCODE_ENTER:
                         al.clear();
                         search(2);
+                        slidingView.setPanelHeight(300);
 
                         break;
                     case KeyEvent.KEYCODE_DEL:

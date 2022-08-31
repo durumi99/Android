@@ -137,7 +137,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
-                    android:layout_marginLeft="50dp"
+                    android:layout_marginLeft="20dp"
                     android:gravity="center_horizontal|top"
                     android:visibility="invisible">
 
@@ -461,20 +461,21 @@
                 android:layout_marginBottom="2dp"
                 android:background="#D3D3D3"/>
             //가까운 충전소 찾기 버튼
-            <Button
-                    android:id="@+id/ChargingSpace"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/white"
-                android:background="#00ff0000"
-                android:textColor="@color/black"
-                android:gravity="left"
-                android:text="가까운 충전소 찾기"
-                android:drawableLeft="@drawable/ic_charging"
-                android:onClick="ChargingClick"
-                >
-            </Button>
+
             //구분선
+
+            <Button
+                android:id="@+id/ChargingSpace"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#00ff0000"
+                android:backgroundTint="@color/white"
+                android:drawableLeft="@drawable/ic_charging"
+                android:gravity="left"
+                android:onClick="ChargingClick"
+                android:text="가까운 충전소 찾기"
+                android:textColor="@color/black"></Button>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
