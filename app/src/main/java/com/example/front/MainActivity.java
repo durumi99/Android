@@ -15,6 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -523,8 +524,6 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         }
     }
 
-
-
     private void hide(SlidingUpPanelLayout slidingView,int check){ // 0 : start, 1 : end ,2 : map button
         LinearLayout dragview1 = (LinearLayout)findViewById(R.id.dragview1);
         LinearLayout dragview2 = (LinearLayout)findViewById(R.id.dragview2);
@@ -693,6 +692,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         Button confirmButton = (Button)findViewById(R.id.confirm_button);
         confirmButton.setVisibility(View.GONE);
     }
+
     private void search(int index){
         TMapPoint tpoint = tMapView.getLocationPoint();
         latitude = tpoint.getLatitude();
@@ -787,6 +787,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         }
 
     }
+
     public void addMarker(TMapPOIItem poi) {
         //point 객체
         TMapMarkerItem item = new TMapMarkerItem();
@@ -804,7 +805,6 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
         tMapView.addMarkerItem(poi.getPOIID(),item);
     }
-
     public void addMarker(double lat, double lng, String title) {
         TMapMarkerItem item = new TMapMarkerItem();
         TMapPoint point = new TMapPoint(lat, lng);
@@ -836,9 +836,17 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
 
     }
+
     public void popClick(View view){
         PopupMenu popM = new PopupMenu(this,view);
         popM.getMenuInflater().inflate(R.menu.main_menu,popM.getMenu());
+
+        Intent temp = getIntent();
+        boolean islogin = temp.getBooleanExtra("isLogin",false);
+        if(islogin) {
+            MenuItem item = popM.getMenu().findItem(R.id.menu2);
+            item.setTitle("로그아웃");
+        }
         popM.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -849,19 +857,19 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                         startActivity(intent);
                         return true;
                     case R.id.menu2:
-                        if(true) { // 로그인
+                        if(!islogin) { // 로그인
                             intent = new Intent(MainActivity.this, LoginActivity.class);
                             startActivity(intent);
                         }
                         else{ // 로그 아웃
-                            ;
+//                            item.setTitle("로그아웃");
+                            Log.d("logout","menu");
                         }
                         return true;
                     case R.id.menu3:
                         intent = new Intent(MainActivity.this,ReportActivity.class);
                         startActivity(intent);
                         return true;
-
                     default:
                         return false;
                 }
@@ -943,6 +951,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         int timeTT = (int) Math.ceil(timeT);
         timeTaken.setText(Integer.toString(timeTT)+"분");
     }
+
     public void switchClick(View view){
         TextView searchBar_start = (TextView) findViewById(R.id.searchBar_start2);
         TextView searchBar_end = (TextView) findViewById(R.id.searchBar_end2);
@@ -1036,7 +1045,6 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
     }
 
-
     public void mapClick(View view){
         SlidingUpPanelLayout slidingView = (SlidingUpPanelLayout) findViewById(R.id.slidingView);
         editState = true;
@@ -1063,6 +1071,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                     }
                 });
     }
+
     @Override
     public void onLocationChange(Location location) {
         tMapView.setLocationPoint(location.getLongitude(), location.getLatitude());

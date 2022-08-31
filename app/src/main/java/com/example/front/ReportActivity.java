@@ -89,6 +89,7 @@ public class ReportActivity  extends AppCompatActivity {
                 if(checkInput() == false){
                     return;
                 }
+                reportResponse();
                 removeWholeText();
                 Intent intent = new Intent(ReportActivity.this, PopupActivity.class);
                 startActivity(intent);
@@ -96,6 +97,11 @@ public class ReportActivity  extends AppCompatActivity {
         });
 
     }
+
+    private void reportResponse() {
+
+    }
+
     public boolean checkInput(){
         EditText placeText = (EditText) findViewById(R.id.place);
         EditText addressText = (EditText) findViewById(R.id.address);
