@@ -91,7 +91,8 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
     ArrayList<HashMap<String,String>> listviewlist=  new ArrayList<HashMap<String, String>>();
     ArrayList<HashMap<String,Double>> listview_xy=  new ArrayList<HashMap<String, Double>>();
-    ArrayList<String> listviewsearchedlist= new ArrayList<>();
+    ArrayList<Listviewitem> listviewsearchedlist= new ArrayList<>();
+
     ArrayList<String> listviewtmp;
     ArrayList<pair> al = new ArrayList<>();
 
@@ -410,7 +411,13 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
             @Override
             public void onItemClick(AdapterView<?> a_parent, View a_view, int position, long a_id) {
                 searchBar.setText(al.get(position).name);
-                listviewsearchedlist.add(0,al.get(position).name);
+
+
+                //listviewsearchedlist.add(0,al.get(position).name);
+                Listviewitem a=new Listviewitem(R.drawable.ic_icon,al.get(position).name,R.drawable.ic_cancel_x);
+                listviewsearchedlist.add(a);
+
+                searchedlist();
                 Adapter.notifyDataSetChanged();
                 startLatitude = al.get(position).x;
                 startLongitude = al.get(position).y;
@@ -427,7 +434,9 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
             @Override
             public void onItemClick(AdapterView<?> a_parent, View a_view, int position, long a_id) {
                 searchBar_end.setText(al.get(position).name);
-                listviewsearchedlist.add(0,al.get(position).name);
+               //********************************** listviewsearchedlist.add(0,al.get(position).name);
+                Listviewitem a=new Listviewitem(R.drawable.ic_icon,al.get(position).name,R.drawable.ic_cancel_x);
+                listviewsearchedlist.add(a);
                 Adapter.notifyDataSetChanged();
                 destLatitude = al.get(position).x;
                 destLongitude = al.get(position).y;
@@ -624,7 +633,6 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
             list.setVisibility(View.VISIBLE);
         }
         else if(index==9){
-            System.out.println("11111");
 
             listend.setVisibility(View.GONE);
             list.setVisibility(View.GONE);
@@ -648,12 +656,9 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
     }
 
     private void searchedlist() {
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listviewsearchedlist) ;
         ListView list = (ListView) findViewById(R.id.HistoryListView);
+        ListviewAdapter adapter=new ListviewAdapter(this,R.layout.listviewitem,listviewsearchedlist);
         list.setAdapter(adapter);
-        list.setVisibility(View.VISIBLE);
-
     }
 
     private void nonhide(SlidingUpPanelLayout slidingView,int check){ // 0 : start, 1 : end, 2 : map button

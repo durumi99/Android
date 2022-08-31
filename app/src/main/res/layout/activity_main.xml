@@ -345,7 +345,7 @@
                         android:layout_marginTop="20dp"
                         android:layout_marginLeft="5dp"
                         ></ImageView>
-                
+
 
                 //출발 위치 입력 폼
                 <RelativeLayout
@@ -450,10 +450,10 @@
 
             <Button
                 android:id="@+id/ChargingSpace"
-                android:layout_width="wrap_content"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:background="#00ff0000"
                 android:backgroundTint="@color/white"
+                android:background="#00ff0000"
                 android:drawableLeft="@drawable/ic_charging"
                 android:drawablePadding="5dp"
                 android:gravity="left|center_vertical"
@@ -461,6 +461,7 @@
                 android:text="가까운 충전소 찾기"
                 android:layout_marginLeft="10dp"
                 android:textColor="@color/black"></Button>
+
 
             <View
                 android:layout_width="match_parent"
