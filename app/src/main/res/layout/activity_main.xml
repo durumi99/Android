@@ -262,13 +262,13 @@
                         android:id="@+id/route_length"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="140dp"
-                        android:layout_marginTop="70dp"
+                        android:layout_marginLeft="80dp"
+                        android:layout_marginTop="10dp"
                         android:text="572m"
                         android:textColor="@color/black"
                         android:textSize="20dp"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"></TextView>
+                        app:layout_constraintLeft_toLeftOf="@+id/time_taken"
+                        app:layout_constraintTop_toTopOf="@+id/time_taken"></TextView>
 
                     <ImageButton
                         android:id="@+id/DetailButton"
