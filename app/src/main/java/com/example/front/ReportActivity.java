@@ -108,7 +108,6 @@ public class ReportActivity  extends AppCompatActivity {
                 }
 //                reportResponse();
 
-
                 removeWholeText();
                 Intent intent = new Intent(ReportActivity.this, PopupActivity.class);
                 startActivity(intent);

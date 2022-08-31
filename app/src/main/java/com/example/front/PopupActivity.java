@@ -25,6 +25,8 @@ public class PopupActivity extends Activity {
 
     public void mOnClose(View view){
         finish();
+        Intent intent = new Intent(PopupActivity.this, MainActivity.class);
+        startActivity(intent);
     }
 
     @Override
