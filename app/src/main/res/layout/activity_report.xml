@@ -91,6 +91,9 @@
                 android:layout_marginHorizontal="15dp"
                 android:ems="10"
                 android:text="사진 촬영"
+                android:textColor="@color/white"
+                android:background="@drawable/border_login"
+                android:backgroundTint="@color/purple_500"
                 tools:ignore="MissingConstraints" />
 
             <Button
@@ -99,6 +102,9 @@
                 android:layout_height="40dp"
                 android:ems="10"
                 android:text="앨범에서 읽어오기"
+                android:textColor="@color/white"
+                android:background="@drawable/border_login"
+                android:backgroundTint="@color/purple_500"
                 tools:ignore="MissingConstraints" />
         </LinearLayout>
 
@@ -117,6 +123,9 @@
             android:layout_height="50dp"
             android:layout_gravity="center"
             android:text="제보 전송"
+            android:textColor="@color/white"
+            android:background="@drawable/border_login"
+            android:backgroundTint="@color/purple_500"
             tools:ignore="MissingConstraints" />
 
     </LinearLayout>

@@ -38,7 +38,6 @@
         <activity
             android:name=".MainActivity"
             android:exported="true" />
-        <activity android:name=".NoticeActivity" />
         <activity android:name=".FAQActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".ReportActivity" />
