@@ -13,5 +13,6 @@
     <color name="transparent">#00000000</color>
     <color name="red">#FFFF0000</color>
     <color name="routecolor">#FF077DEE</color>
+    <color name="blue">#FFFFFF01</color>
 
 </resources>

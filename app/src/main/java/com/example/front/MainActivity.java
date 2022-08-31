@@ -1034,7 +1034,6 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         TMapPolyLine tMapPolyLine = new TMapPolyLine();
         tMapPolyLine.setLineColor(Color.BLUE);
         tMapPolyLine.setLineWidth(2);
-
         TMapPolygon tpolygon = new TMapPolygon();
        //tpolygon.setLineColor(getResources().getColorStateList(R.color.purple_500));
 
