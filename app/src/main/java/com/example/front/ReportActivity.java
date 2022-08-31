@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -26,7 +27,15 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import java.io.File;
 import java.io.IOException;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ReportActivity  extends AppCompatActivity {
     private static final String TAG = "WHEEL SAFE";
@@ -98,9 +107,65 @@ public class ReportActivity  extends AppCompatActivity {
 
     }
 
-    private void reportResponse() {
+    public void reportResponse() {
+        EditText titleText = (EditText) findViewById(R.id.place);
+        EditText contentText = (EditText) findViewById(R.id.explain);
+        EditText addressText = (EditText) findViewById(R.id.address);
+        ImageView imgView = (ImageView) findViewById(R.id.iv_photo);
+        String title = titleText.getText().toString().trim();
+        String content = contentText.getText().toString().trim();
+        String address = addressText.getText().toString().trim();
+        String image = imgView.toString().trim();
 
+//        File file = new File(imgView);
+//        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+//        MultipartBody.Part body = MultipartBody.Part.createFormData("uploaded_file", file.getName(), requestFile);
+//        RequestBody descBody = RequestBody.create(MediaType.parse("text/plain"), idx);
+//
+
+        //loginRequest에 사용자가 입력한 email과 pw를 저장
+        ReportRequest reportRequest = new ReportRequest(title,content,address,image);
+
+        //retrofit 생성
+        RetrofitClient retrofitClient = RetrofitClient.getInstance();
+        initReportApi initReportApi = RetrofitClient.getReportInterface();
+        Call<String> call = initReportApi.getReportResponse(reportRequest);
+
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                Log.d("isSuccessful", String.valueOf(response.isSuccessful()));
+                Log.d("body", String.valueOf(response.body()));
+                Log.d("response", String.valueOf(response.code()));
+                //통신 성공
+                if (response.isSuccessful() && response.body() != null) {
+                        ;
+                }
+                else {
+                AlertDialog.Builder builder = new AlertDialog.Builder(ReportActivity.this);
+                builder.setTitle("알림")
+                        .setMessage("전송 실패.\n")
+                        .setPositiveButton("확인", null)
+                        .create()
+                        .show();
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+            }
+        }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(ReportActivity.this);
+                t.printStackTrace();
+                builder.setTitle("알림")
+                        .setMessage("예기치 못한 오류가 발생하였습니다.\n 고객센터에 문의바랍니다.")
+                        .setPositiveButton("확인", null)
+                        .create()
+                        .show();
+            }
+        });
     }
+
 
     public boolean checkInput(){
         EditText placeText = (EditText) findViewById(R.id.place);

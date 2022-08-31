@@ -15,6 +15,7 @@ public class RetrofitClient {
     private static initMyApi initMyApi;
     private static initRegisterApi initRegisterApi;
     private static initLogoutApi initLogoutApi;
+    private static initReportApi initReportApi;
     //사용하고 있는 서버 BASE 주소
     private static String baseUrl = "http://18.207.245.34:3000/";
 
@@ -41,6 +42,7 @@ public class RetrofitClient {
         initMyApi = retrofit.create(initMyApi.class);
         initRegisterApi = retrofit.create((initRegisterApi.class));
         initLogoutApi = retrofit.create((initLogoutApi.class));
+        initReportApi = retrofit.create((initReportApi.class));
     }
 
     public static RetrofitClient getInstance() {
@@ -58,6 +60,9 @@ public class RetrofitClient {
     }
     public static initLogoutApi getLogoutInterface() {
         return initLogoutApi;
+    }
+    public static initReportApi getReportInterface() {
+        return initReportApi;
     }
 
 }

@@ -10,5 +10,5 @@ import retrofit2.http.Query;
 public interface initReportApi {
     //@통신 방식("통신 API명")
     @POST("/users/report")
-    Call<String> getReportResponse(@Body LoginRequest loginRequest );
+    Call<String> getReportResponse(@Body ReportRequest reportRequest);
 }
