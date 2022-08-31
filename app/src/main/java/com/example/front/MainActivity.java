@@ -191,7 +191,6 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         });
 
 
-
         //출발지 선택시 searchbar 나타내며 수행할 것
         EditText start_edit = (EditText) findViewById(R.id.edit_start);
         start_edit.bringToFront();
