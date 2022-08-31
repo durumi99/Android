@@ -63,13 +63,12 @@
 
                     <Button
                         android:id="@+id/backToMain_start"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_alignParentTop="true"
-                        android:layout_marginLeft="40dp"
-                        android:layout_marginTop="25dp"
-                        android:background="@drawable/ic_cancel"
-                        android:backgroundTint="@color/black" />
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_marginLeft="45dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_gravity="left|center_vertical"
+                        android:background="@drawable/ic_cancel"/>
 
                 </FrameLayout>
 
@@ -94,11 +93,11 @@
 
                     <Button
                         android:id="@+id/backToMain_end"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_alignParentTop="true"
-                        android:layout_marginLeft="40dp"
-                        android:layout_marginTop="23dp"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_marginLeft="45dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_gravity="left|center_vertical"
                         android:background="@drawable/ic_cancel" />
 
                 </FrameLayout>
@@ -124,11 +123,11 @@
 
                     <Button
                         android:id="@+id/backToMain_charge"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_alignParentTop="true"
-                        android:layout_marginLeft="40dp"
-                        android:layout_marginTop="23dp"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_marginLeft="45dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_gravity="left|center_vertical"
                         android:background="@drawable/ic_cancel" />
 
                 </FrameLayout>
@@ -183,8 +182,7 @@
                         android:layout_alignParentTop="true"
                         android:layout_marginLeft="12dp"
                         android:layout_marginTop="15dp"
-                        android:background="@drawable/ic_cancel"
-                        android:backgroundTint="@color/black"/>
+                        android:background="@drawable/ic_cancel"/>
                     <Button
                         android:id="@+id/switching"
                         android:layout_width="20dp"
@@ -193,7 +191,6 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="50dp"
                         android:background="@drawable/ic_switch"
-                        android:backgroundTint="@color/black"
                         android:onClick="switchClick"/>
 
                 </FrameLayout>
@@ -237,6 +234,7 @@
                     android:textSize="20dp"
                     android:textStyle="bold"
                     android:visibility="invisible"
+                    android:background="@color/purple_500"
                     android:onClick="confirmClick">
                 </Button>
                 <!--                경로 탐색-->
