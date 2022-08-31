@@ -1055,7 +1055,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         tMapView.addTMapPolyLine("경로", tMapPolyLine);
 
         TextView timeTaken = (TextView) findViewById(R.id.time_taken);
-        timeTaken.setText(String.valueOf(Math.round((ps.totalTime/60)*100)/100.0)+"분");
+        timeTaken.setText(String.valueOf(Math.round((ps.totalTime/60)*100)/100+1)+"분");
 
         TextView routeLength = (TextView) findViewById(R.id.route_length);
         routeLength.setText(String.valueOf(ps.totalDistance)+"m");
